@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Music — Blitz Nation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F9F7F5;--white:#FFFFFF;
+  --border:#E5DDD3;--border-h:#C4AD90;
+  --tan:#A8976E;--tan-l:#D6C9B0;--tan-bg:#F5F0E8;
+  --text:#1A1A1A;--text-2:#595959;--muted:#9A9082;
+  --orange:#ED5829;
+  --r:10px;--rl:16px;--t:.18s ease;
+  --sh:0 1px 8px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+  --shh:0 2px 14px rgba(0,0,0,.10),0 6px 24px rgba(0,0,0,.06);
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);
+  font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+.hdr{padding:0 28px;height:62px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;background:var(--white);
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.prog-wrap{flex:1;max-width:320px;display:flex;align-items:center;gap:12px}
+.prog-bar{flex:1;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.prog-fill{height:100%;background:var(--tan);transition:width .5s ease}
+.step-ctr{font-size:12px;color:var(--muted);letter-spacing:.05em;white-space:nowrap}
+
+/* MAIN */
+.main{display:flex;justify-content:center;padding:48px 18px 130px}
+.sw{width:100%;max-width:700px;animation:rise .28s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* STEP LABELS */
+.s-sec{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--tan);margin-bottom:10px}
+.s-title{font-family:'Cormorant Garant',serif;font-size:34px;font-weight:600;line-height:1.15;margin-bottom:10px}
+.s-sub{font-size:15px;color:var(--text-2);margin-bottom:32px;line-height:1.65;font-weight:300}
+@media(max-width:600px){.s-title{font-size:24px}.s-sub{font-size:14px}}
+
+/* OPTION CARDS */
+.opts{display:grid;gap:9px}
+.opts.c2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:560px){.opts.c2{grid-template-columns:1fr}}
+.opt{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:17px 19px;cursor:pointer;display:flex;align-items:flex-start;gap:13px;
+  transition:border-color var(--t),box-shadow var(--t),transform var(--t);box-shadow:var(--sh)}
+.opt:hover{border-color:var(--tan);box-shadow:var(--shh);transform:translateY(-1px)}
+.opt.sel{border-color:var(--tan);background:var(--tan-bg)}
+.indicator{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;transition:all var(--t)}
+.opt.sel .indicator{background:var(--tan);border-color:var(--tan);color:#fff}
+.ind-sq{width:20px;height:20px;border-radius:4px;border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;transition:all var(--t)}
+.opt.sel .ind-sq{background:var(--tan);border-color:var(--tan);color:#fff}
+.opt-body{flex:1;min-width:0}
+.opt-label{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.opt-desc{font-size:13px;color:var(--muted);line-height:1.5;font-weight:300}
+.badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;
+  align-self:flex-start;flex-shrink:0;letter-spacing:.05em}
+.b-tier{background:var(--tan-bg);color:var(--tan);border:1px solid var(--tan-l)}
+.b-pop{background:var(--text);color:#fff;font-size:9px;letter-spacing:.08em}
+
+/* MUSIC PICKER (genre + size on one screen) */
+.picker-group-label{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px}
+.picker-divider{display:flex;align-items:center;gap:14px;margin:20px 0;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.picker-divider::before,.picker-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.size-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+@media(max-width:500px){.size-row{grid-template-columns:repeat(2,1fr)}}
+.size-opt{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:14px 10px;cursor:pointer;text-align:center;
+  transition:border-color var(--t),box-shadow var(--t),transform var(--t);box-shadow:var(--sh)}
+.size-opt:hover{border-color:var(--tan);box-shadow:var(--shh);transform:translateY(-1px)}
+.size-opt.sel{border-color:var(--tan);background:var(--tan-bg)}
+.size-opt-label{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.size-opt-desc{font-size:11px;color:var(--muted);font-weight:300}
+
+/* BAND CARDS */
+.band-grid{display:grid;gap:16px}
+.band-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--rl);
+  overflow:hidden;cursor:pointer;transition:border-color var(--t),box-shadow var(--t),transform var(--t);box-shadow:var(--sh)}
+.band-card:hover{border-color:var(--tan);box-shadow:var(--shh);transform:translateY(-2px)}
+.band-card.sel{border-color:var(--tan)}
+.band-media{position:relative;width:100%;aspect-ratio:16/7;
+  background:linear-gradient(135deg,#EDE5D8,#D6CAB8);
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.band-card.sel .band-media{outline:3px solid var(--tan);outline-offset:-3px}
+.ph-label{font-family:'Cormorant Garant',serif;font-style:italic;font-size:13px;color:var(--tan);opacity:.6;letter-spacing:.08em}
+.vbtn{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.92);
+  border:none;border-radius:20px;padding:5px 13px 5px 9px;font-family:'Jost',sans-serif;
+  font-size:11px;font-weight:500;color:var(--text);cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:background var(--t)}
+.vbtn:hover{background:#fff}
+.vbtn.disabled{opacity:.4;cursor:default}
+.pi{width:18px;height:18px;background:var(--tan);border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center}
+.pi::after{content:'';border-style:solid;border-width:3.5px 0 3.5px 6px;
+  border-color:transparent transparent transparent #fff;margin-left:2px}
+.pi.grey{background:var(--muted)}
+.band-body{padding:16px 19px;display:flex;align-items:flex-start;gap:12px}
+.band-info{flex:1}
+.band-name{font-family:'Cormorant Garant',serif;font-size:21px;font-weight:600;margin-bottom:6px}
+.band-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px}
+.band-tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;
+  background:var(--tan-bg);color:var(--tan);border:1px solid var(--tan-l);
+  letter-spacing:.05em;text-transform:uppercase}
+.band-desc{font-size:13px;color:var(--muted);line-height:1.5;font-weight:300}
+.band-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;transition:all var(--t)}
+.band-card.sel .band-chk{background:var(--tan);border-color:var(--tan);color:#fff}
+
+/* ACT CARDS */
+.act-section-label{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:22px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.act-section-label:first-child{margin-top:0}
+.act-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:540px){.act-grid{grid-template-columns:1fr}}
+.act-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;transition:border-color var(--t),box-shadow var(--t),transform var(--t);box-shadow:var(--sh)}
+.act-card:hover{border-color:var(--tan);box-shadow:var(--shh);transform:translateY(-1px)}
+.act-card.sel{border-color:var(--tan);background:var(--tan-bg)}
+.act-media{position:relative;width:100%;aspect-ratio:4/3;
+  background:linear-gradient(135deg,#EDE5D8 0%,#D6CAB8 100%);
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.act-card.sel .act-media{outline:3px solid var(--tan);outline-offset:-3px}
+.act-body{padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+.act-info{flex:1}
+.act-name{font-family:'Cormorant Garant',serif;font-size:16px;font-weight:600;margin-bottom:2px}
+.price-tier{font-family:'Jost',sans-serif;font-size:10px;font-weight:600;letter-spacing:.05em;color:var(--tan);background:rgba(171,156,122,.12);border:1px solid rgba(171,156,122,.3);border-radius:4px;padding:1px 5px;vertical-align:middle;margin-left:5px}
+.elite-badge{font-family:'Jost',sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;color:#fff;background:var(--tan);border-radius:4px;padding:1px 6px;vertical-align:middle;margin-left:5px;text-transform:uppercase}
+.confirm-card{display:flex;align-items:center;gap:14px;background:var(--cream);border:1px solid rgba(171,156,122,.3);border-radius:12px;padding:14px;margin-bottom:28px}
+.confirm-card-img{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.confirm-card-img-ph{width:80px;height:80px;border-radius:8px;background:#e8e3da;flex-shrink:0}
+.confirm-card-label{font-family:'Jost',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tan);margin-bottom:4px}
+.confirm-card-name{font-family:'Cormorant Garant',serif;font-size:22px;font-weight:600;color:#222;line-height:1.2}
+.confirm-card-sub{font-family:'Jost',sans-serif;font-size:12px;color:#999;margin-top:3px}
+.act-sub{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--tan);margin-bottom:4px}
+.act-desc{font-size:12px;color:var(--muted);line-height:1.45;font-weight:300}
+.act-chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;
+  transition:all var(--t)}
+.act-card.sel .act-chk{background:var(--tan);border-color:var(--tan);color:#fff}
+
+/* EXTRA HERO + CARDS */
+.extra-hero{width:100%;aspect-ratio:16/7;border-radius:var(--r);
+  background:linear-gradient(135deg,#EDE5D8,#D6CAB8);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:26px;overflow:hidden;position:relative}
+.extra-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.extra-hero-ph{font-family:'Cormorant Garant',serif;font-style:italic;font-size:14px;color:var(--tan);opacity:.65;letter-spacing:.08em}
+.extra-cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:540px){.extra-cards-grid{grid-template-columns:1fr}}
+.extra-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;transition:border-color var(--t),box-shadow var(--t),transform var(--t);box-shadow:var(--sh)}
+.extra-card:hover{border-color:var(--tan);box-shadow:var(--shh);transform:translateY(-1px)}
+.extra-card.sel{border-color:var(--tan);background:var(--tan-bg)}
+.extra-media{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#EDE5D8,#D6CAB8);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.extra-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.extra-body{padding:11px 13px;display:flex;align-items:flex-start;gap:9px}
+.extra-info{flex:1}
+.extra-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.extra-desc{font-size:12px;color:var(--muted);line-height:1.4;font-weight:300}
+.extra-chk{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);
+  flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;transition:all var(--t)}
+.extra-card.sel .extra-chk{background:var(--tan);border-color:var(--tan);color:#fff}
+
+/* SPLIT FIELDS */
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:500px){.split-grid{grid-template-columns:1fr}}
+.split-field{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:19px 21px;transition:border-color var(--t);box-shadow:var(--sh)}
+.split-field:focus-within{border-color:var(--tan)}
+.split-label{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:9px;display:block}
+.split-input{width:100%;background:none;border:none;outline:none;font-family:'Jost',sans-serif;
+  font-size:22px;font-weight:300;color:var(--text);padding:0}
+.split-input::placeholder{color:var(--tan-l)}
+
+/* INPUTS */
+.igroup{margin-bottom:17px}
+.ilabel{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+.ifield{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:12px 15px;font-size:15px;color:var(--text);font-family:'Jost',sans-serif;
+  transition:border-color var(--t);outline:none;box-shadow:var(--sh)}
+.ifield:focus{border-color:var(--tan)}
+.ifield::placeholder{color:var(--tan-l)}
+textarea.ifield{resize:vertical;min-height:88px;font-weight:300}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:540px){.form-row{grid-template-columns:1fr}}
+
+/* INFO BOX */
+.info-box{background:var(--tan-bg);border:1px solid var(--tan-l);border-radius:var(--r);padding:18px 22px;margin-bottom:22px}
+.info-box strong{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--tan);margin-bottom:6px}
+.info-box p{font-size:13px;color:var(--text-2);line-height:1.6;font-weight:300}
+
+/* SUMMARY */
+.sum-section{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:22px;margin-bottom:12px;box-shadow:var(--sh)}
+.sum-section-title{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--tan);margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sum-row:last-child{border-bottom:none}
+.sum-k{color:var(--muted);flex-shrink:0;font-weight:300;min-width:130px}
+.sum-v{color:var(--text);font-weight:500;text-align:right;word-break:break-word}
+
+/* FOOTER */
+.fnav{position:fixed;bottom:0;left:0;right:0;padding:13px 22px;
+  background:rgba(249,247,245,.97);backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);display:flex;gap:11px;align-items:center;z-index:100}
+.btn{padding:13px 26px;border-radius:var(--r);font-family:'Jost',sans-serif;font-weight:500;
+  font-size:13px;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;
+  transition:all var(--t);border:none;outline:none}
+.btn-back{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+.btn-back:hover{border-color:var(--text);color:var(--text)}
+.btn-next{background:var(--text);color:#fff;flex:1;max-width:250px;box-shadow:0 2px 10px rgba(26,26,26,.14)}
+.btn-next:hover:not(:disabled){background:#333;transform:translateY(-1px)}
+.btn-next:disabled{opacity:.28;cursor:not-allowed}
+.btn-submit{background:var(--orange);color:#fff;flex:1;max-width:250px;box-shadow:0 2px 10px rgba(237,88,41,.22)}
+.btn-submit:hover{background:#d44b20;transform:translateY(-1px)}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* VIDEO MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:var(--white);border-radius:var(--rl);overflow:hidden;
+  width:100%;max-width:780px;position:relative}
+.modal-hdr{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border)}
+.modal-title{font-family:'Cormorant Garant',serif;font-size:20px;font-weight:600}
+.modal-close{background:none;border:none;cursor:pointer;font-size:22px;
+  color:var(--muted);line-height:1;padding:4px 8px;border-radius:6px;transition:color var(--t)}
+.modal-close:hover{color:var(--text)}
+.modal-frame{position:relative;width:100%;aspect-ratio:16/9}
+.modal-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.watch-vid-btn{display:block;width:100%;text-align:center;padding:10px;
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--tan);background:none;border:none;
+  border-top:1px solid var(--border);cursor:pointer;transition:background var(--t)}
+.watch-vid-btn:hover:not(:disabled){background:var(--tan-bg)}
+.watch-vid-btn:disabled{color:var(--tan-l);cursor:default}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="hdr">
+    <a href="https://weareblitznation.com" target="_blank">
+      <img src="https://static.wixstatic.com/media/aefb83_8063438947e146b0ba23c45286efaba7~mv2.png/v1/fill/w_218,h_30,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Blitz%20Nation%20Logo%20Padding.png"
+           alt="Blitz Nation" style="height:26px;width:auto;display:block">
+    </a>
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" id="pf" style="width:3%"></div></div>
+      <div class="step-ctr" id="sc">Step 1</div>
+    </div>
+  </header>
+  <main class="main"><div id="sw" class="sw"></div></main>
+  <nav class="fnav" id="fnav">
+    <button class="btn btn-back" id="btnBack" onclick="goBack()">← Back</button>
+    <button class="btn btn-next" id="btnNext" onclick="goNext()">Continue →</button>
+  </nav>
+</div>
+<div id="videoModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeVideo()">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div id="videoTitle" class="modal-title"></div>
+      <button class="modal-close" onclick="closeVideo()">✕</button>
+    </div>
+    <div class="modal-frame">
+      <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+<script>
+// ── CONFIG ───────────────────────────────────────────────────
+const EJ_KEY = 'YOUR_PUBLIC_KEY';
+const EJ_SVC = 'YOUR_SERVICE_ID';
+const EJ_TPL = 'YOUR_TEMPLATE_ID';
+emailjs.init({ publicKey: EJ_KEY });
+
+// ── BAND DATA ────────────────────────────────────────────────
+const P = (h,w,r) => `https://static.wixstatic.com/media/${h}/v1/fill/w_${w},h_${r},al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo.jpg`;
+const BAND_DATA = {
+  blitz_house:       { name:'Blitz House Band',   range:'4–5 Piece',  genre:'Party',        desc:'Our flagship house band — versatile, high-energy, always a crowd favourite.',                photo:P('aefb83_fc7fc43e01234f50a58fec55ca5fe13d~mv2.png',980,428), video:'https://www.youtube.com/watch?v=EU0Dhp9B3xI' },
+  rock_nation:       { name:'Rock Nation',         range:'4–5 Piece',  genre:'Rock',         desc:'Classic rock anthems to contemporary indie hits, for couples who love guitar-driven energy.',photo:P('feee51_c128605fed7a4d66a4722341720b0475~mv2.png',980,428), video:'https://www.youtube.com/watch?v=LuJKZ2WVovs' },
+  blitz_fusion:      { name:'Blitz Fusion',        range:'4–5 Piece',  genre:'DJ + Live',    desc:'DJ energy fused with live instrumentation — a truly unique experience.',                    photo:P('aefb83_87dd898d5225436f80aba30cbcc54226~mv2.png',980,428), video:'https://www.youtube.com/watch?v=Jwvl1R4yNiE' },
+  viva:              { name:'Viva',                range:'6–12 Piece', genre:'Showband',     desc:'One of the most sought-after wedding showbands — a breathtaking live show every time.',     photo:P('aefb83_9294823050844889bfc3df3defac8f77~mv2.jpg',980,428), video:'https://www.youtube.com/watch?v=5zhsrlA_8L8' },
+  fortune_west:      { name:'Fortune West',        range:'6–12 Piece', genre:'Pop / R&B',    desc:'Sleek, polished, and irresistibly danceable — a full-production party band.',               photo:P('aefb83_28d3152b47a147fa9733af4ca0691d36~mv2.jpg',980,428), video:'https://www.youtube.com/watch?v=w5LfM3T_Xn0' },
+  the_rumours:       { name:'The Rumours',         range:'6–11 Piece', genre:'Classic Hits', desc:'Timeless hits from every era delivered with raw energy and big personality.',               photo:P('aefb83_73777843552146d6a2ebc764606cb200~mv2.jpg',980,428), video:'https://www.youtube.com/watch?v=gpyIGBy1Fh8' },
+  late_night:        { name:'Late Night',          range:'6–12 Piece', genre:'DJ + Vocals',  desc:'DJ meets live vocals — seamless, high-energy, the ultimate late-night experience.',         photo:P('aefb83_e0b75807045c4287879599bea6706373~mv2.png',980,428), video:'https://www.youtube.com/watch?v=vajCyLbWRH8' },
+  blitz_fusion_large:{ name:'Blitz Fusion Large',  range:'6–8 Piece',  genre:'DJ + Live',    desc:'An expanded DJ-live ensemble with a full complement of live musicians.',                    photo:P('aefb83_87dd898d5225436f80aba30cbcc54226~mv2.png',980,428), video:'https://www.youtube.com/watch?v=t-8pDtvN7n8' },
+  custom_orchestra:  { name:'Band + Orchestra',    range:'Up to 40',   genre:'Luxury',       desc:'The ultimate wedding show — a full live band paired with a bespoke orchestra.',            photo:null, video:null },
+};
+
+// ── ACT DATA ─────────────────────────────────────────────────
+const A = h => P(h, 480, 360);
+const ACT_DATA = {
+  // STRINGS — Solo
+  sunset_violin:     { name:'Sunset Violin',      sub:'Strings — Solo',               desc:'A solo violinist of rare versatility — from tender ceremony moments to high-energy dance floor.',                                      genre:'strings', size:'solo',    photo:A('feee51_046d0f34293042b091c66ebc9ebfca50~mv2.jpeg'), video:'https://www.youtube.com/watch?v=Af5qSLkhyx0' },
+  harp_nation:       { name:'Harp Nation',         sub:'Strings — Solo (Harp)',         desc:'Classically trained harpist spanning jazz, classical, and contemporary — ethereal, elegant, and deeply expressive.',                  genre:'strings', size:'solo',    photo:A('feee51_77112bd1e7f74954bb834d6342bf094b~mv2.jpeg'), video:'https://www.youtube.com/watch?v=9xcIrx05Leo' },
+  // STRINGS — Duo
+  elegant_harmony:   { name:'Elegant Harmony',    sub:'Strings — Duo (Cello & Sax)',   desc:'Cello and saxophone in a beautifully unexpected pairing — refined, intimate, and deeply sophisticated.',                             genre:'strings', size:'duo',     photo:A('aefb83_3357f8c31a7f4374ac247aecf5d8b636~mv2.jpg'),  video:'https://www.youtube.com/watch?v=sRcRwsOgTho' },
+  sunset_strings:    { name:'Sunset Strings',     sub:'Strings — Duo (Violin & Guitar)',desc:'Violin and guitar — a dynamic duo ranging from classical melodies to contemporary pop, perfect for ambient or interactive sets.',     genre:'strings', size:'duo',     photo:A('aefb83_7219d23192354c78b5184c928b09ebba~mv2.jpg'),  video:'https://www.youtube.com/watch?v=WE4z4ePN0qI' },
+  // STRINGS — Trio / Quartet
+  belle_trio:        { name:'Belle Trio',          sub:'Strings — Trio (Harp, Violin & Cello)', desc:'Harp, violin, and cello weaving familiar songs into something ethereal, emotive, and cinematic.',                            genre:'strings', size:'trio',    photo:A('feee51_2c98af1e6e634a5f9f25115cc424f6a8~mv2.png'),  video:'https://www.youtube.com/watch?v=ByHhCyRKYNw', price:'$$$$' },
+  string_nation:     { name:'String Nation',       sub:'Strings — Trio / Quartet',     desc:'A premier ensemble scaling from solo to quartet — classical meets contemporary with versatility to match any event.',                 genre:'strings', size:'trio',    photo:A('aefb83_f2822bcce31643659ab0fbab36d4ac3f~mv2.png'),  video:'https://www.youtube.com/watch?v=-2g_8OKNUVg', price:'$$$' },
+  blitz_quartet:     { name:'Blitz Quartet',       sub:'Strings — Trio / Quartet',            desc:'A modern string quartet celebrated for merging classical technique with contemporary genres — visually and musically captivating.',   genre:'strings', size:'trio',    photo:A('aefb83_0dab296b7a0142c7b249c2da87c4f881~mv2.png'),  video:'https://www.youtube.com/watch?v=tP5W5dW3vmA', price:'$$$' },
+  second_strings:    { name:'Second Strings',      sub:'Strings — Duo / Trio / Quartet',      desc:'A distinguished ensemble — solo to quartet, masters of classical to contemporary pop with over 1,000 events of polished chemistry.',  genre:'strings', size:'trio',    photo:A('aefb83_f5673947fe3e4c2c9952b77fea1b4932~mv2.png'),  video:'https://www.youtube.com/watch?v=lVK-mRA71rk', price:'$$' },
+  luxe_strings:      { name:'Luxe Strings',        sub:'Strings — 5-Piece (Drums, 3 Strings & Sax)', desc:'A premium five-piece string experience fusing percussion, saxophone and three strings for a sound that is as cinematic as it is dynamic.', genre:'strings', size:'5piece',  photo:null, video:'https://www.youtube.com/watch?v=RajQu5qdtIk', price:'$$$$' },
+
+  // JAZZ — Solo
+  austin_g:          { name:'Austin G',           sub:'Jazz — Solo (Saxophone)',           desc:'A saxophonist whose playing moves effortlessly across jazz, soul, and contemporary styles — polished, high-impact performances that elevate any setting.',         genre:'jazz',    size:'solo',    elite:true, photo:A('aefb83_e0c6eef957cf48daba1f72baea761653~mv2.jpg'),  video:'https://www.youtube.com/watch?v=J9e9K25wUfw' },
+  lindsay_opera:     { name:'Lindsay Opera',      sub:'Acoustic — Solo (Classical Vocalist)', desc:'An accomplished vocalist and actress — theatricality, multi-lingual repertoire, and a rare ability to move from jazz and opera to contemporary pop with elegance.', genre:'acoustic', size:'solo',    photo:A('feee51_eae2ab12d7894e25bd87487ce95842b9~mv2.jpg'),  video:'https://www.youtube.com/watch?v=ptr3WDbrBKk' },
+  roma_echo:         { name:'Roma Echo',            sub:'Jazz — Solo (Guitar & Vocals)',      desc:'Jazz, gypsy jazz, bossa nova, and pop/rock — solo instrumental or with vocals, creating an elevated atmosphere with ease and elegance.',  genre:'jazz',    size:'solo',    photo:A('aefb83_045b37c25d1342b787c2250c1fae31ee~mv2.png'),  video:'https://www.youtube.com/watch?v=4Ck7CodLl2M' },
+  soul_district:     { name:'Soul District',       sub:'Jazz — Solo (Piano & Vocals)',  desc:'A solo pianist and vocalist delivering smooth, soulful jazz, R&B, and timeless ballads — warm, sophisticated, and unforgettable.',   genre:'jazz',    size:'solo',    photo:A('aefb83_a9162e138f084172b248fc0afecd5ee7~mv2.png'),  video:'https://www.youtube.com/watch?v=G2WdSXIT_9g' },
+  // JAZZ — Duo
+  chateau_jazz:      { name:'Chateau Jazz Duo',    sub:'Jazz — Duo (Guitar & Vocals)',                    desc:'A distinguished European duo — female vocalist and guitarist performing in multiple languages with international elegance.',           genre:'jazz',    size:'duo',     photo:A('aefb83_7b1476aa33e6472d92ed6cdfb43d57c3~mv2.png'),  video:'https://www.youtube.com/watch?v=EY90tgBwaZA' },
+  cocktail_duo:      { name:'Cocktail Duo',        sub:'Jazz — Duo (Piano & Sax)',       desc:'Piano and saxophone — a celebrated duo crafting perfect cocktail-hour ambiance from soothing jazz standards to contemporary hits.',   genre:'jazz',    size:'duo',     photo:A('feee51_0c2d56b5892c47f897d528360564e691~mv2.jpg'),  video:'https://www.youtube.com/watch?v=fWppkbluHzY' },
+  velvet_jazz_duo:  { name:'Velvet Jazz Duo',     sub:'Jazz — Duo',                    desc:'The intimate two-piece Velvet Jazz experience — piano and vocals weaving jazz standards and contemporary classics with timeless cool.',  genre:'jazz',    size:'duo',     photo:A('aefb83_fa21993540e6490d8989afbccc9923b5~mv2.png'),  video:null },
+  // JAZZ — Trio
+  after_hours_trio: { name:'After Hours Trio',    sub:'Jazz — Trio',                   desc:'Jazz standards, swing, and soul to innovative modern pop interpretations — After Hours excels in elevating any event atmosphere.',       genre:'jazz',    size:'trio',    photo:A('feee51_17e15742624a4f51b951105e5cdb34ec~mv2.jpg'),  video:null },
+  velvet_jazz_trio:  { name:'Velvet Jazz Trio',    sub:'Jazz — Trio',                   desc:'The classic jazz trio format — versatile, timeless, endlessly cool.',                                                                genre:'jazz',    size:'trio',    photo:A('aefb83_1fd0d3d82f6d448f9905412adc7ff57e~mv2.png'),  video:null },
+  italian_jazz_trio: { name:'Italian Jazz Trio',   sub:'Jazz — Trio',                   desc:'Italian melodies blended with jazz sophistication — an elegant auditory journey with continental refinement.',                       genre:'jazz',    size:'trio',    photo:A('aefb83_c6415287ee054d7e98d835a458bed10d~mv2.png'),  video:'https://www.youtube.com/watch?v=s_8NiwXm9LY' },
+  bay_noir:          { name:'Bay Noir',             sub:'Jazz — Trio',                   desc:'An original jazz trio blending cinematic influences with live improvisation — thoughtful, expressive, and completely unique.',       genre:'jazz',    size:'trio',    photo:A('aefb83_947ed09a3c65407cbf932d9425d7757e~mv2.png'),  video:'https://www.youtube.com/watch?v=-LhFHC6r6i4' },
+  route_66:          { name:'Route 66',             sub:'Jazz — Trio',                   desc:'A premier jazz ensemble celebrated for enthusiastic renditions of Django Reinhardt, Nat King Cole, and modern hits.',               genre:'jazz',    size:'trio',    photo:A('feee51_da98ed27afc24747b7e4e406a70493ea~mv2.jpeg'), video:'https://www.youtube.com/watch?v=5g2BWt7rLRA' },
+  // JAZZ — Quartet
+  italian_quartet:   { name:'Italian Quartet',    sub:'Jazz — Quartet (Italian Vocals)',   desc:'Authentic and soul-stirring performances of classic Italian songs — a female-led quartet blending jazz, opera, and Italian standards with continental elegance.', genre:'jazz',    size:'quartet', photo:A('aefb83_cc93467ce57041cebcddbea88c3ed0ad~mv2.png'),  video:'https://www.youtube.com/watch?v=Jtwh-W9FOyM' },
+  velvet_jazz:       { name:'Velvet Jazz',          sub:'Jazz — Quartet',               desc:'The full Velvet Jazz quartet — rich, warm, and utterly captivating.',                                                                genre:'jazz',    size:'quartet', photo:A('aefb83_1fd0d3d82f6d448f9905412adc7ff57e~mv2.png'),  video:null },
+  de_la_jazz:        { name:'De La Jazz',            sub:'Jazz — Quartet',               desc:'A blend of timeless jazz standards and contemporary musical hits with vocals.',                                                      genre:'jazz',    size:'quartet', photo:A('aefb83_b8541c54737b4f17af25b51977e6dc48~mv2.jpg'),  video:'https://www.youtube.com/watch?v=Ny79lcgoKfE' },
+  after_hours_5pc:   { name:'After Hours 5 Piece',   sub:'Jazz — 5 Piece',               desc:'Jazz standards, swing, and soul to innovative modern pop interpretations — After Hours excels in elevating any event atmosphere.',   genre:'jazz',    size:'quartet', photo:A('feee51_17e15742624a4f51b951105e5cdb34ec~mv2.jpg'),  video:'https://www.youtube.com/watch?v=HxQyO05hcbg' },
+  after_hours_7pc:   { name:'After Hours 7 Piece',   sub:'Jazz — 7 Piece with Vocals',   desc:'Jazz standards, swing, and soul to innovative modern pop interpretations — After Hours excels in elevating any event atmosphere.',   genre:'jazz',    size:'quartet', photo:A('feee51_17e15742624a4f51b951105e5cdb34ec~mv2.jpg'),  video:'https://www.youtube.com/watch?v=5h68vwBQScs' },
+
+  // ACOUSTIC — Solo
+  // ACOUSTIC — Solo (male vocalists / guitar)
+  americana_guitar: { name:'Americana Guitar',  sub:'Acoustic — Solo (Guitar & Vocals)', desc:'Blitz Nation\'s in-house solo guitarist and vocalist — covers rock, pop, country and R&B with a distinctive style that makes classic tracks feel fresh.',          genre:'acoustic', size:'solo', photo:A('feee51_ba21f74e911d426f88efd8b9b8dcba22~mv2.jpg'), video:'https://www.youtube.com/watch?v=z9t-UJ3m4n0' },
+  beach_boy:        { name:'Beach Boy',          sub:'Acoustic — Solo (Guitar & Vocals)',                   desc:'A celebration of the Beach Boys\' enduring appeal — a musician who lives and breathes the sound, delivered with infectious joy and effortless style.',              genre:'acoustic', size:'solo', photo:A('aefb83_1d8c10722eeb43cf953bb33f031687af~mv2.png'), video:'https://www.youtube.com/watch?v=_LAqsWb3kX4' },
+  ivory_rebel:      { name:'Ivory Rebel',        sub:'Acoustic — Solo (Piano & Vocals)',  desc:'Distinguished solo pianist and vocalist known for remarkable piano prowess, powerful vocal delivery, and an extensive repertoire spanning pop, rock, and R&B.',   genre:'acoustic', size:'solo', photo:A('aefb83_89f0360240bc4b2c8b09ad98a75fd388~mv2.png'), video:'https://www.youtube.com/watch?v=K2HFc7AhYow' },
+  melody_weaver:    { name:'Melody Weaver',      sub:'Acoustic — Solo (Guitar & Vocals)', desc:'Soulful vocals with exquisite guitar playing — a heartfelt repertoire blending pop, R&B, rock, and Motown with warmth and genuine connection.',                  genre:'acoustic', size:'solo', photo:A('aefb83_c9099bcffdf04b248cd8587f2df6d5de~mv2.png'), video:'https://www.youtube.com/watch?v=gnxhOQO1qWs' },
+  smooth_riffs:     { name:'Smooth Riffs',       sub:'Acoustic — Solo (Guitar & Vocals)', desc:'Soul, depth, and authenticity — a versatile solo act blending pop, R&B, rock, and Motown with soulful guitar playing and a warm, engaging presence.',           genre:'acoustic', size:'solo', photo:A('aefb83_a0228144be9a45168ad61bfed4e2c38d~mv2.jpg'), video:'https://www.youtube.com/watch?v=1CO-qNh15t8' },
+  smooth_tones:     { name:'Smooth Tones',       sub:'Acoustic — Solo (Piano & Vocals)',  desc:'Magnetic stage presence and exquisite musicality — a solo pianist and singer who brings charm and sophistication to pop, Motown, rock, and R&B.',                genre:'acoustic', size:'solo', photo:A('aefb83_6e61984e1e4744ecba720ef31681e3fc~mv2.png'), video:'https://www.youtube.com/watch?v=3InKZHnI4iI' },
+  soul_strummer:    { name:'Soul Strummer',      sub:'Acoustic — Solo (Guitar & Vocals)', desc:'A remarkable solo guitarist who blends pop, rock, R&B, and Motown with exceptional ability — both technically accomplished and deeply soulful.',                genre:'acoustic', size:'solo', photo:A('aefb83_ae7d371f1918498384930177318d015c~mv2.png'), video:'https://www.youtube.com/watch?v=g7ECkU0h_sQ' },
+  soulful_keys:     { name:'Soulful Keys',       sub:'Acoustic — Solo (Keys & Vocals)',   desc:'A sensational keyboard artist and vocalist of profound musicality — dynamic stage presence and an extensive pop, rock, Motown, and R&B repertoire.',              genre:'acoustic', size:'solo', photo:A('aefb83_fb9cfe81431344fe9521f36535418007~mv2.png'), video:'https://www.youtube.com/watch?v=jlppcYo2V2A' },
+  soulful_serenade: { name:'Soulful Serenade',   sub:'Acoustic — Solo (Guitar & Vocals)', desc:'Magnetic solo artist known for exceptional musicality and a broad range spanning pop, rock, R&B, hip-hop, and Motown — always deeply personal.',                 genre:'acoustic', size:'solo', photo:A('aefb83_d066ca4fc8924b39b41eb455067d49f6~mv2.png'), video:'https://www.youtube.com/watch?v=9jzuKOwHr5U' },
+  nick_k:           { name:'Nick K',             sub:'Blitz Elite — Violin',              desc:'Seamlessly moves from refined ceremony moments to high-energy dance floor experiences — a versatile soloist with a natural gift for reading any room.',            genre:'acoustic', size:'solo', elite:true, photo:A('aefb83_7eceab59fc644800af2152bb02faacaa~mv2.jpg'), video:'https://www.youtube.com/watch?v=05vmYW8F8MQ' },
+  danny_v:          { name:'Danny V',            sub:'Blitz Elite — Guitar & Vocals',     desc:'Intentional and emotionally grounded — equally at home in a wedding ceremony, cocktail hour, or private dinner, creating atmosphere that feels genuinely personal.', genre:'acoustic', size:'solo', elite:true, photo:A('aefb83_fecda66d2a0a4a339e04d24d012acbeb~mv2.png'), video:'https://www.youtube.com/watch?v=CZZqxrfYAg0' },
+  jordan_d:         { name:'Jordan D',           sub:'Blitz Elite — Sax',                 desc:'Energy, movement, and presence in every performance — whether setting the tone at a ceremony, building energy through cocktail hour, or engaging on the dance floor.', genre:'acoustic', size:'solo', elite:true, photo:A('aefb83_bc3fc00240a94b83abc7d907a3623444~mv2.jpg'), video:'https://www.youtube.com/watch?v=FvIHyl2gIS0' },
+  solo_piano:       { name:'Solo Piano',         sub:'Acoustic — Solo (Piano)',            desc:'A virtuoso solo pianist with an expansive skill set spanning classical, jazz, R&B, and contemporary pop — elegant, versatile, and endlessly captivating.',        genre:'acoustic', size:'solo', photo:A('feee51_693d07f04e394a478eac73f40cec80f6~mv2.jpeg'), video:'https://www.youtube.com/watch?v=95TA86QoVjA' },
+  // ACOUSTIC — Solo (female vocalists)
+  jesse_p:          { name:'Jesse P',            sub:'Blitz Elite — Guitar & Vocals',     desc:'A performer whose voice carries emotion with clarity and intention — creating moments of genuine connection that guests remember long after the event.',             genre:'acoustic', size:'solo', elite:true, photo:A('aefb83_7856045ade6b4ebb81f95b033b654f51~mv2.png'), video:'https://www.youtube.com/watch?v=y0hmCR7Jv9M' },
+  lilia_l:          { name:'Lilia L',            sub:'Blitz Elite — Violin',              desc:'Energetic, emotional, and deeply interactive — a performer who thrives on the exchange of energy between performer and audience, making every set unforgettable.',  genre:'acoustic', size:'solo', elite:true, photo:A('aefb83_348cab14ca444dcb83869c00b681ecff~mv2.jpg'), video:'https://www.youtube.com/watch?v=W1sBK5uKIf4' },
+  luna_lix:         { name:'Luna Lix',           sub:'Acoustic — Solo (Guitar & Vocals)',         desc:'A polished, professional recording artist on stage — pop, rock, and country delivered with charisma, depth, and the presence of a true headliner.',               genre:'acoustic', size:'solo', photo:A('aefb83_1106978c5f2a4b8a89a67bc9a4790742~mv2.png'), video:'https://www.youtube.com/watch?v=9huQ4EsBh7w' },
+  melody_road:      { name:'Melody Road',        sub:'Acoustic — Solo (Guitar & Vocals)',         desc:'Seamlessly integrates genres — merging pop with folk-country to produce a sound that is both familiar and distinctively her own.',                                genre:'acoustic', size:'solo', photo:A('aefb83_81dd75b04b04450a8450635425eee0d6~mv2.png'), video:'https://www.youtube.com/watch?v=xQEJV3o3I4Y' },
+  melody_storm:     { name:'Melody Storm',       sub:'Acoustic — Solo (Piano & Vocals)',  desc:'Exceptional piano and vocal skills across pop, rock, R&B, and classical — a versatile female performer who elevates any atmosphere with sophistication.',          genre:'acoustic', size:'solo', photo:A('aefb83_647a0acc3a0c4548ab52bff02a3b9e52~mv2.jpeg'), video:'https://www.youtube.com/watch?v=_WNyPOhd6Zg' },
+  moon_melody:      { name:'Moon Melody',        sub:'Acoustic — Solo (Guitar & Vocals)', desc:'Renowned solo female artist whose guitar and vocals captivate audiences with a diverse pop, rock, and country repertoire — warm, emotive, and effortlessly engaging.', genre:'acoustic', size:'solo', photo:A('aefb83_d2046936eb6c43cc8fc48798bb2ab814~mv2.png'), video:'https://www.youtube.com/watch?v=XvbTXre_kso' },
+  piano_songbird:   { name:'Piano Songbird',     sub:'Acoustic — Solo (Piano & Vocals)',  desc:'A timeless solo act blending piano and vocals across a wide-ranging repertoire of over 1,000 songs — elegant, versatile, and beloved by audiences of all ages.',  genre:'acoustic', size:'solo', photo:A('aefb83_e52dbdcf8cfc4099b3ee95a4248263a4~mv2.png'), video:'https://www.youtube.com/watch?v=5QH6p3-kkjI' },
+  pixie_darling:    { name:'Pixie Darling',      sub:'Acoustic — Solo (Guitar & Vocals)',         desc:'A celebrated vocalist with charismatic stage presence and an extensive musical repertoire — pop, country, and rock performed with warmth, energy, and real star quality.', genre:'acoustic', size:'solo', photo:A('feee51_6bd131834c6f40ddac7254241330dc87~mv2.jpeg'), video:'https://www.youtube.com/watch?v=vLQwtR_52OQ' },
+  raine_solo:       { name:'Raine Solo',         sub:'Acoustic — Solo (Guitar & Vocals)',         desc:'An accomplished solo artist with velvety vocals and skillful guitar work — characterful performances spanning pop, R&B, rock, and country.',                      genre:'acoustic', size:'solo', photo:A('aefb83_c6031abb6d6f4df0b86102ac1045e73d~mv2.png'), video:'https://www.youtube.com/watch?v=z0NBzljLoic' },
+  chord_charm:       { name:'Chord & Charm',         sub:'Acoustic — Solo (Guitar & Vocals)', desc:'An immersive solo performer known for exceptional looping skills — building rich layered sounds live, from soulful ballads to energetic upbeat sets.',        genre:'acoustic', size:'solo', photo:A('aefb83_bdd2081a0863493b989034429c1d0f3a~mv2.jpg'), video:'https://www.youtube.com/watch?v=WtkyJngU5jE' },
+  chris_w:           { name:'Chris W',               sub:'Blitz Elite — Guitar & Vocals', desc:'A reading-the-room musician who shapes soulful vocal and piano performances to create personal, engaging moments — from intimate ambiance to lively sets.', genre:'acoustic', size:'solo', elite:true, photo:A('aefb83_fdcd05e2dfd94afdbfcbc516642ce8e4~mv2.jpeg'), video:'https://www.youtube.com/watch?v=KgFON_Eqs4M' },
+  electric_solo:     { name:'Electric Solo',          sub:'Acoustic — Solo (Electric Guitar & Vocals)', desc:'A solo electric guitarist who ignites events with classic and contemporary rock and pop — powerful, versatile, and endlessly entertaining.',               genre:'acoustic', size:'solo', photo:A('feee51_ebe302b049414e4bb06079adb451f7e5~mv2.jpeg'), video:'https://www.youtube.com/watch?v=-eOyuqcca8c' },
+  rockin_ridge:      { name:'Rockin Ridge',           sub:'Acoustic — Solo (Guitar & Vocals)', desc:'Exceptional guitar skills and compelling vocals navigating from deep Motown roots to contemporary pop — immersive, tailored, and memorable.',              genre:'acoustic', size:'solo', photo:A('aefb83_894a21e392bb4df58aa76f967ce67c2b~mv2.png'), video:'https://www.youtube.com/watch?v=jIW8x1eVH9U' },
+  groove_strummer:   { name:'Groove Strummer',      sub:'Acoustic — Solo (Guitar & Vocals)',               desc:'A musical chameleon adapting his soulful voice and expert guitar playing to any atmosphere — versatile, charismatic, and always engaging.',                    genre:'acoustic', size:'solo', photo:A('aefb83_9979d89733f747ce90a05ffaeeca105a~mv2.png'), video:'https://www.youtube.com/watch?v=LkKZuzqkD7s' },
+  spanish_guitar:    { name:'Spanish Guitar',       sub:'Acoustic — Solo (Classical)',   desc:'World-class Spanish guitarists who tailor each performance to the mood — from tender ceremony preludes to vibrant reception sets.',                             genre:'acoustic', size:'solo', photo:A('feee51_5efddc03c4174186a3d45b0ef6473255~mv2.jpg'), video:'https://www.youtube.com/watch?v=oMJwx1YFhmw' },
+  the_piano_man:     { name:'The Piano Man',         sub:'Acoustic — Solo (Piano & Vocals)',desc:'A distinguished singing pianist ranging from Paul Simon classics to contemporary hits — sophisticated ambiance or lively centre-stage entertainment.',          genre:'acoustic', size:'solo', photo:A('aefb83_95a36c588b454477a4cd588857d88758~mv2.png'), video:'https://www.youtube.com/watch?v=ueI9xbMovL4' },
+  acoustic_solo:     { name:'Acoustic Solo',        sub:'Acoustic — Solo (Guitar & Vocals)',              desc:'Solo guitar artistry blending pop, rock, R&B, and more — charismatic performances tailored to any occasion.',                       genre:'acoustic',size:'solo',    photo:A('aefb83_9a894b7bef8044c69bc3efab2f60643c~mv2.png'),  video:'https://www.youtube.com/watch?v=Xy-fVrsPShI' },
+  // ACOUSTIC — Duo
+  dueling_piano:     { name:'Dueling Pianos',        sub:'Acoustic — Duo (Pianos)',       desc:'Two pianists head-to-head in a high-energy crowd-pleasing show — hits from every genre and era with energy, laughs, and unforgettable melodies.',              genre:'acoustic', size:'duo',  photo:A('aefb83_b8bf2a88bac749b9aa866cea6b72988f~mv2.png'), video:'https://www.youtube.com/watch?v=iovfD-Kv2aw' },
+  bossa_groove:      { name:'Bossa Groove Duo',     sub:'Acoustic — Duo (Guitar & Vocals)',  desc:'Male-female guitarist and vocalist combining bossa nova rhythms with Latin and pop for a captivating, stylish musical fusion.',     genre:'acoustic',size:'duo',     photo:A('aefb83_66a93fb54304406eac3360172114cb0f~mv2.png'),  video:'https://www.youtube.com/watch?v=9CGg38He30U' },
+  havana_duo:        { name:'Havana Duo',           sub:'Acoustic — Duo (Guitar & Vocals)',       desc:'Sophisticated Latin rhythms blended with modern pop — salsa, bossa nova, and a touch of rhythmic elegance.',                       genre:'acoustic',size:'duo',     photo:A('feee51_3ddd376b6dcc46658fd37a6bd9565bd5~mv2.jpg'),  video:'https://www.youtube.com/watch?v=px7Wvma1bek' },
+  // ACOUSTIC — Trio
+  island_pulse:      { name:'Island Pulse',       sub:'Acoustic — Trio (Reggae)',          desc:'Authentic Caribbean sounds with warm vocals, rolling basslines, and laid-back percussion — reggae vibes ideal for rooftop gatherings, beach events, and weddings.', genre:'acoustic', size:'trio', photo:A('aefb83_8bf9428b939c46a2b1d386cecb11a44e~mv2.png'), video:'https://www.youtube.com/watch?v=rvGbail5vX4' },
+  wave_riders:       { name:'Wave Riders',        sub:'Acoustic — Trio (Beach Band)',      desc:'Drums, bass, and guitar creating an authentic beach atmosphere — a blend of laid-back charm and dynamic energy ideal for summer celebrations and coastal events.', genre:'acoustic', size:'trio', photo:A('aefb83_e522dd9ead7148c9987801ade580c270~mv2.png'), video:'https://www.youtube.com/watch?v=gqrZzDfxPTo' },
+  ritmo_del_sol:     { name:'Ritmo Del Sol',         sub:'Acoustic — Trio (Latin Bossa Nova)', desc:'Chic, smooth, and full of rhythm — guitar, upright bass, and percussion performing Latin standards and American songs with a bossa nova twist.',          genre:'acoustic', size:'trio', photo:A('aefb83_a1f03e005d7b41d595a2978b3d8ea2d6~mv2.png'), video:'https://www.youtube.com/watch?v=KIcaN2Y0tls' },
+  latin_cuban_trio:  { name:'Latin Cuban Trio',     sub:'Acoustic — Trio (Latin)',      desc:'A musical journey through Havana — boleros, cha-chas, and passionate Latin rhythms for any celebration.',                          genre:'acoustic',size:'trio',    photo:A('aefb83_c4a5494344f44a658915b5401bdead04~mv2.png'),  video:'https://www.youtube.com/watch?v=MslETs8p_Lo' },
+  dusty_roads:       { name:'Dusty Roads',          sub:'Acoustic — Trio (Americana)',  desc:'Upright bass, acoustic guitar, and percussion — modern Americana with a rootsy cool ideal for stylish weddings and private events.',genre:'acoustic',size:'trio',    photo:A('aefb83_8280bdc28de74d14bacda724920c14cf~mv2.png'),  video:'https://www.youtube.com/watch?v=BZ--9k5zij4' },
+
+  // ROAMING — Solo
+  alex_y:            { name:'Alex Y',             sub:'Blitz Elite — Sax',                 desc:'A saxophonist of rare stage charisma — commanding, expressive, and equally at home walking through a crowd or anchoring a ceremony.',                            genre:'roaming', size:'solo',    elite:true, photo:null, video:null },
+  jeremy_j:          { name:'Jeremy J',           sub:'Blitz Elite — Violin',              desc:'A violinist who thrives on live connection and improvisation — moving through the crowd with expressive, spontaneous playing that creates genuine moments.',        genre:'roaming', size:'solo',    elite:true, photo:A('aefb83_fec07c00a02f4f9481504dd1f71de13a~mv2.jpg'),  video:'https://www.youtube.com/watch?v=TWjFsbvQwhU' },
+  sam_s:             { name:'Sam S',              sub:'Blitz Elite — Guitar & Vocals',     desc:'Known for improvising in real time and shaping the music personally around your guests — intimate, adaptable, and never the same show twice.',                    genre:'roaming', size:'solo',    elite:true, photo:A('aefb83_c6fe09c058c0453cae2b68c3c40b37b2~mv2.jpg'),  video:'https://www.youtube.com/watch?v=pWJimRAPIX0' },
+  roaming_sax:       { name:'Roaming Saxophone',    sub:'Roaming — Solo',              desc:'A saxophonist who mingles live through the crowd — our most popular choice for cocktail hours and receptions.',                     genre:'roaming', size:'solo',    photo:A('aefb83_04473c84ad934ae2a547c76ebac93b94~mv2.jpg'),  video:'https://www.youtube.com/watch?v=VfWGYHJ3Mak', popular:true },
+  // ROAMING — The Roams
+  the_roams_duo:     { name:'The Roams Duo',        sub:'The Roams — Duo',             desc:'Two roaming musicians who move together through your guests — dynamic, engaging, and memorable.',                                  genre:'roaming', size:'duo',     photo:A('aefb83_04473c84ad934ae2a547c76ebac93b94~mv2.jpg'),  video:null },
+  the_roams_trio:    { name:'The Roams Trio',       sub:'The Roams — Trio',            desc:'Three roaming performers creating an immersive atmosphere across the entire room.',                                                genre:'roaming', size:'trio',    photo:A('aefb83_04473c84ad934ae2a547c76ebac93b94~mv2.jpg'),  video:null },
+  the_roams_quartet: { name:'The Roams Quartet',    sub:'The Roams — Quartet',         desc:'Four roaming musicians — a truly spectacular and unforgettable experience.',                                                      genre:'roaming', size:'quartet', photo:A('aefb83_04473c84ad934ae2a547c76ebac93b94~mv2.jpg'),  video:null },
+};
+
+// ── EXTRA DATA ───────────────────────────────────────────────
+const EXTRA_DATA = {
+  extra_lighting:   { name:'Concert & Stage Lighting', desc:'Dramatic stage lighting, LED effects, and colour washes to transform your venue.', photo:P('feee51_a7ef6cfb7e8744f5b84ef9eb4899fac2~mv2.png',980,551) },
+  extra_stage:      { name:'Stage',                    desc:'A professional stage elevates the band, creates a focal point, and ensures every guest has a perfect view.', photo:P('feee51_41abaf7c350e44299a543f47cb302321~mv2.png',980,551) },
+  extra_dance_floor:{ name:'Dance Floor',              desc:'A dedicated dance floor defines the party space and gets guests on their feet.', photo:P('feee51_7558971a6a3940d781b8486f3cf4b970~mv2.png',980,551) },
+  extra_podiums:    { name:'Blitz Nation Podiums',     desc:'Our signature podiums add a breathtaking visual spectacle to your event.', photo:'https://static.wixstatic.com/media/aefb83_e812792ee419426486a427076c025eda~mv2.jpg/v1/crop/x_570,y_302,w_1586,h_549/fill/w_980,h_340,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Podiums.jpg' },
+  uplights:         { name:'Uplights',                 desc:'Colour-wash lighting placed around the venue to set the mood.', photo:P('aefb83_500f59f11e2145169553de0bdfd371b3~mv2.png',980,551) },
+  photo_booth:      { name:'Photo Booth',              desc:'A staffed booth with props and prints — guests love it, and the memories last forever.', photo:P('aefb83_de48b812f07946699c64a67c7e224c19~mv2.jpg',980,551) },
+  sparklers:        { name:'Cold Floor Sparklers',     desc:'A dramatic pyrotechnic effect — no heat, no smoke. Perfect for a grand entrance.', photo:P('aefb83_b62b58d76c1e49b7a982e2bfff12f679~mv2.png',980,551) },
+  co2:              { name:'CO₂ Guns',                 desc:'A spectacular blast of CO₂ jets for big moments on the dance floor.', photo:P('aefb83_401b380581cb47119be492902d81d4cf~mv2.png',980,551) },
+};
+
+// ── LIGHTING DATA ────────────────────────────────────────────
+const LIGHTING_DATA = {
+  opener:    { name:'Opener Package',    desc:'Side stage setup with clean wash lighting — polished, professional, and perfect for smaller receptions.',                   photo:'https://static.wixstatic.com/media/feee51_a5a9d3ab4e1b4806a85c8af68b29fa62~mv2.png/v1/crop/x_152,y_0,w_2480,h_1536/fill/w_980,h_607,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/side%20stage%20package%20.png' },
+  showcase:  { name:'Showcase Package', desc:'Main stage package with full front wash and mid-level effects — a noticeable step up in atmosphere and impact.',             photo:'https://static.wixstatic.com/media/feee51_4a292961093b4f819dde2a9a87b99e52~mv2.png/v1/crop/x_76,y_0,w_1240,h_768/fill/w_980,h_607,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/main%20stage%20package.png' },
+  portman:   { name:'Portman Package',  desc:'Elevated production with intelligent fixtures, colour wash, and dynamic light changes synced to the music.',                photo:'https://static.wixstatic.com/media/feee51_5771c502315b45aa9b8cb5d0a00160e0~mv2.png/v1/crop/x_20,y_0,w_2583,h_1600/fill/w_980,h_607,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/portman%20package.png' },
+  headliner: { name:'Headliner Package',desc:'Full concert-style production — moving heads, LED panels, and high-output fixtures for a spectacular live show.',           photo:'https://static.wixstatic.com/media/aefb83_3d59ca51260e4b07b38e7c7463882f24~mv2.png/v1/crop/x_700,y_146,w_1346,h_833/fill/w_980,h_607,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/without%20tube.png' },
+  dj_small:  { name:'DJ Small',         desc:'A compact, professional DJ setup — all the essentials for a seamless DJ performance in intimate spaces.',                   photo:'https://static.wixstatic.com/media/aefb83_0b7b07ae33e4416cb08fa5b1aca96893~mv2.png/v1/crop/x_0,y_55,w_1264,h_737/fill/w_480,h_280,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/dj%20small%201.png' },
+  dj_medium: { name:'DJ Medium',        desc:'A mid-size DJ rig with enhanced lighting integration — ideal for receptions with a strong DJ element.',                      photo:'https://static.wixstatic.com/media/aefb83_85e084ee5a394025974b7cb8c6a79853~mv2.png/v1/crop/x_14,y_0,w_1317,h_768/fill/w_480,h_280,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/dj%20med.png' },
+  dj_large:  { name:'DJ Large',         desc:'A full-scale DJ production setup — commanding presence, powerful sound, and full lighting integration.',                    photo:'https://static.wixstatic.com/media/aefb83_ffb32af8c5d249dcad78e9cbe5b40d46~mv2.png/v1/crop/x_0,y_55,w_1264,h_737/fill/w_480,h_280,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/dj%20large%203.png' },
+};
+
+// ── STATE ────────────────────────────────────────────────────
+const ans = {};
+const hist = ['start'];
+let cur = 'start';
+
+// ── HELPERS ──────────────────────────────────────────────────
+const times      = () => ans.ceremony_times || [];
+const hasCeremony= () => times().includes('ceremony');
+const hasCocktail= () => times().includes('cocktail');
+const hasDinner  = () => times().includes('dinner');
+
+function firstTimeStep() {
+  if (hasCeremony()) return 'ceremony_music_type';
+  if (hasCocktail()) return 'cocktail_music_type';
+  if (hasDinner())   return 'dinner_music_type';
+  return 'ceremony_details';
+}
+function afterCeremonyConfig() {
+  if (ans.journey === 'dj') {
+    if (hasCocktail()) return 'cocktail_music_type';
+    if (hasDinner())   return 'dinner_music_type';
+    return 'dj_podiums';
+  }
+  return 'ceremony_details';
+}
+function afterCeremonyDetails() {
+  if (hasCocktail()) return 'cocktail_music_type';
+  if (hasDinner())   return 'dinner_music_type';
+  return 'speeches_sound';
+}
+function afterCocktailConfig() {
+  if (ans.journey === 'dj') {
+    if (hasDinner()) return 'dinner_music_type';
+    return 'dj_podiums';
+  }
+  if (hasDinner()) return 'dinner_music_type';
+  return 'speeches_sound';
+}
+function afterDinnerConfig() {
+  if (ans.journey === 'dj') return 'dj_podiums';
+  return 'speeches_sound';
+}
+
+// Routes from music_picker selection (genre or size) to the sub-step
+function musicPickNext(val, prefix, afterFn) {
+  const map = {
+    strings:'_strings', jazz:'_jazz', acoustic:'_acoustic', soloist:'_soloist', roaming:'_roaming',
+    solo:'_size_solo', duo:'_size_duo', trio:'_size_trio', quartet:'_size_quartet',
+  };
+  return map[val] ? prefix + map[val] : afterFn();
+}
+
+function bandSizeLabel() {
+  return ({ '4_5':'4–5 Piece','6_8':'6–8 Piece','9_11':'9–11 Piece','12_15':'12–15 Piece','orchestra':'Band + Orchestra' })[ans.band_size] || 'your band';
+}
+function bandOptions() {
+  return ({
+    '4_5':      ['blitz_house','rock_nation','blitz_fusion'],
+    '6_8':      ['viva','fortune_west','the_rumours','late_night','blitz_house','rock_nation','blitz_fusion_large'],
+    '9_11':     ['viva','fortune_west','the_rumours','late_night','blitz_fusion_large'],
+    '12_15':    ['viva','fortune_west','late_night'],
+    'orchestra':['custom_orchestra'],
+  })[ans.band_size] || [];
+}
+function afterBandExtras() { return 'contact_details'; }
+
+// Build a sub-step for a given moment prefix
+function subStep(section, title, key, actKeys, groups, nextFn, subtitle) {
+  return { section, title, subtitle: subtitle || 'Select the style that best matches your vision — we\'ll go through all the details together in your consultation.', type:'act_cards', key, actKeys, groups, next: nextFn };
+}
+
+// ── STEPS ────────────────────────────────────────────────────
+const steps = {
+
+  start: {
+    section:'Let\'s plan your wedding music',
+    title:'What does your vision look like?',
+    subtitle:'We\'ll guide you through a short quiz to build the perfect live music plan for your day.',
+    type:'single', key:'journey', cols:1,
+    options:[
+      { value:'ceremony', label:'Intimate music for the ceremony & daytime moments', desc:'String quartets, jazz trios, solo violinists, and acoustic artists for your ceremony, cocktail hour, and dinner.' },
+      { value:'band',     label:'A live band for the reception',                     desc:'High-energy showbands and party bands to headline your wedding reception and get everyone on the dance floor.' },
+      { value:'both',     label:'The full experience — daytime music & a live band',  desc:'Specialist musicians for your ceremony and cocktail hour, then a full live band takes over for the reception.' },
+      { value:'dj',       label:'DJ, or DJ paired with live musicians',              desc:'From a solo DJ/MC to Blitz Fusion — DJ energy fused with live saxophone, strings, or percussion.' },
+    ],
+    next: () => ({ ceremony:'ceremony_times', band:'band_size', both:'band_size', dj:'dj_type' })[ans.journey],
+  },
+
+  // ── CEREMONY MOMENTS ───────────────────────────────────────
+  ceremony_times: {
+    section:'Daytime Music',
+    title:'Which moments would you like live music for?',
+    subtitle:'Select all that apply — we\'ll build a plan around each moment.',
+    type:'multi', key:'ceremony_times', cols:1,
+    options:[
+      { value:'ceremony', label:'Ceremony',      desc:'Pre-ceremony, processional, signing, recessional' },
+      { value:'cocktail', label:'Cocktail Hour', desc:'Background music as guests mingle with drinks' },
+      { value:'dinner',   label:'Dinner',        desc:'Ambient music throughout the wedding dinner' },
+    ],
+    next: () => firstTimeStep(),
+  },
+
+  // ── CEREMONY: music type picker ─────────────────────────────
+  ceremony_music_type: {
+    section:'Ceremony Music',
+    title:'What kind of music for your Ceremony?',
+    subtitle: () => ans.journey === 'both'
+      ? 'These are specialist acts separate from your reception band — we coordinate everything seamlessly.'
+      : 'Browse by the genre you have in mind, or by the size of ensemble.',
+    type:'music_picker', key:'ceremony_music_type',
+    next: () => musicPickNext(ans.ceremony_music_type, 'ceremony', afterCeremonyConfig),
+  },
+
+  // Ceremony — by genre
+  ceremony_strings: subStep('Ceremony — Strings', 'What style of strings suits your day?', 'ceremony_act',
+    ['sunset_violin','harp_nation','elegant_harmony','sunset_strings','belle_trio','string_nation','blitz_quartet','second_strings','luxe_strings'],
+    [
+      { label:'Solo',                 keys:['sunset_violin','harp_nation'] },
+      { label:'Duo',                  keys:['elegant_harmony','sunset_strings'] },
+      { label:'Trio',                 keys:['belle_trio'] },
+      { label:'Trio / Quartet',       keys:['blitz_quartet'] },
+      { label:'Duo / Trio / Quartet', keys:['string_nation','second_strings'] },
+      { label:'5-Piece',              keys:['luxe_strings'] },
+    ], () => {
+      const flex = ['string_nation','second_strings','blitz_quartet'];
+      return flex.includes(ans.ceremony_act) ? 'ceremony_strings_size' : afterCeremonyConfig();
+    }
+  ),
+  ceremony_strings_size: {
+    section: 'Ceremony — Strings',
+    get title() { return `You selected ${(ACT_DATA[ans.ceremony_act]||{name:'this ensemble'}).name}`; },
+    subtitle: 'How many musicians would you like?',
+    type: 'strings_confirm',
+    sourceKey: 'ceremony_act',
+    key: 'ceremony_strings_size',
+    next: () => afterCeremonyConfig(),
+  },
+  ceremony_jazz: subStep('Ceremony — Jazz', 'Which jazz act?', 'ceremony_act',
+    ['austin_g','roma_echo','soul_district','chateau_jazz','cocktail_duo','velvet_jazz_duo','after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66','italian_quartet','velvet_jazz','de_la_jazz'],
+    [
+      { label:'Solo',    keys:['austin_g','roma_echo','soul_district'] },
+      { label:'Duo',     keys:['chateau_jazz','cocktail_duo','velvet_jazz_duo'] },
+      { label:'Trio',    keys:['after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66'] },
+      { label:'Quartet & Above', keys:['italian_quartet','velvet_jazz','de_la_jazz'] },
+    ], () => afterCeremonyConfig()
+  ),
+  ceremony_acoustic: subStep('Ceremony — Acoustic', 'Which acoustic act?', 'ceremony_act',
+    ['nick_k','danny_v','jordan_d','jesse_p','lilia_l','chris_w','americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo','dueling_piano','velvet_jazz_duo','cocktail_duo','bossa_groove','havana_duo','island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'],
+    [
+      { label:'Blitz Elite', keys:['nick_k','danny_v','jordan_d','jesse_p','lilia_l','chris_w'] },
+      { label:'Solo', keys:['americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo'] },
+      { label:'Duo',  keys:['dueling_piano','velvet_jazz_duo','cocktail_duo','bossa_groove','havana_duo'] },
+      { label:'Trio', keys:['island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'] },
+    ], () => afterCeremonyConfig()
+  ),
+  ceremony_roaming: subStep('Ceremony — Roaming', 'Which roaming act?', 'ceremony_act',
+    ['roaming_sax','the_roams_duo','the_roams_trio','the_roams_quartet','alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Roaming — Solo',       keys:['roaming_sax'] },
+      { label:'The Roams — Duo / Trio / Quartet', keys:['the_roams_duo','the_roams_trio','the_roams_quartet'] },
+      { label:'Blitz Elite Soloists', keys:['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterCeremonyConfig()
+  ),
+  ceremony_soloist: subStep('Ceremony — Blitz Elite', 'Choose your named artist', 'ceremony_act',
+    ['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Saxophone',        keys:['alex_y','austin_g','jordan_d'] },
+      { label:'Violin',           keys:['jeremy_j','lilia_l','nick_k'] },
+      { label:'Guitar & Vocals',  keys:['chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterCeremonyConfig(),
+    'Every Blitz Elite artist is a named individual — when you book them, you\'re guaranteed that specific person performs at your wedding.'
+  ),
+
+  // Ceremony — by size
+  ceremony_size_solo: subStep('Ceremony — Solo', 'What style of solo act suits your day?', 'ceremony_act',
+    ['sunset_violin','harp_nation','roma_echo','soul_district','americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo','roaming_sax','alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Strings',  keys:['sunset_violin','harp_nation'] },
+      { label:'Jazz',     keys:['roma_echo','soul_district'] },
+      { label:'Acoustic', keys:['americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo'] },
+      { label:'Roaming',  keys:['roaming_sax'] },
+      { label:'Blitz Elite', keys:['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterCeremonyConfig()
+  ),
+  ceremony_size_duo: subStep('Ceremony — Duo', 'What style of duo suits your day?', 'ceremony_act',
+    ['elegant_harmony','sunset_strings','chateau_jazz','cocktail_duo','velvet_jazz_duo','dueling_piano','bossa_groove','havana_duo','the_roams_duo'],
+    [
+      { label:'Strings',  keys:['elegant_harmony','sunset_strings'] },
+      { label:'Jazz',     keys:['chateau_jazz','cocktail_duo','velvet_jazz_duo'] },
+      { label:'Acoustic', keys:['dueling_piano','bossa_groove','havana_duo'] },
+      { label:'Roaming',  keys:['the_roams_duo'] },
+    ], () => afterCeremonyConfig()
+  ),
+  ceremony_size_trio: subStep('Ceremony — Trio', 'What style of trio suits your day?', 'ceremony_act',
+    ['belle_trio','string_nation','blitz_quartet','second_strings','after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66','ritmo_del_sol','latin_cuban_trio','dusty_roads','the_roams_trio'],
+    [
+      { label:'Strings',  keys:['belle_trio','string_nation','blitz_quartet','second_strings'] },
+      { label:'Jazz',     keys:['after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66'] },
+      { label:'Acoustic', keys:['island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'] },
+      { label:'Roaming',  keys:['the_roams_trio'] },
+    ], () => afterCeremonyConfig()
+  ),
+  ceremony_size_quartet: subStep('Ceremony — Quartet & Above', 'What style suits your day?', 'ceremony_act',
+    ['string_nation','blitz_quartet','second_strings','luxe_strings','velvet_jazz','de_la_jazz','the_roams_quartet'],
+    [
+      { label:'Strings',  keys:['string_nation','blitz_quartet','second_strings'] },
+      { label:'Strings — 5-Piece', keys:['luxe_strings'] },
+      { label:'Jazz',     keys:['velvet_jazz','de_la_jazz'] },
+      { label:'Roaming',  keys:['the_roams_quartet'] },
+    ], () => afterCeremonyConfig()
+  ),
+
+  // ── COCKTAIL: music type picker ─────────────────────────────
+  cocktail_music_type: {
+    section:'Cocktail Hour Music',
+    title:'What kind of music for Cocktail Hour?',
+    subtitle: () => ans.journey === 'both'
+      ? 'These are specialist acts separate from your reception band.'
+      : 'Browse by the genre you have in mind, or by the size of ensemble.',
+    type:'music_picker', key:'cocktail_music_type',
+    next: () => musicPickNext(ans.cocktail_music_type, 'cocktail', afterCocktailConfig),
+  },
+
+  // Cocktail — by genre
+  cocktail_strings: subStep('Cocktail Hour — Strings', 'What style of strings suits your day?', 'cocktail_act',
+    ['sunset_violin','harp_nation','elegant_harmony','sunset_strings','belle_trio','string_nation','blitz_quartet','second_strings','luxe_strings'],
+    [
+      { label:'Solo',                 keys:['sunset_violin','harp_nation'] },
+      { label:'Duo',                  keys:['elegant_harmony','sunset_strings'] },
+      { label:'Trio',                 keys:['belle_trio'] },
+      { label:'Trio / Quartet',       keys:['blitz_quartet'] },
+      { label:'Duo / Trio / Quartet', keys:['string_nation','second_strings'] },
+      { label:'5-Piece',              keys:['luxe_strings'] },
+    ], () => {
+      const flex = ['string_nation','second_strings','blitz_quartet'];
+      return flex.includes(ans.cocktail_act) ? 'cocktail_strings_size' : afterCocktailConfig();
+    }
+  ),
+  cocktail_strings_size: {
+    section: 'Cocktail Hour — Strings',
+    get title() { return `You selected ${(ACT_DATA[ans.cocktail_act]||{name:'this ensemble'}).name}`; },
+    subtitle: 'How many musicians would you like?',
+    type: 'strings_confirm',
+    sourceKey: 'cocktail_act',
+    key: 'cocktail_strings_size',
+    next: () => afterCocktailConfig(),
+  },
+  cocktail_jazz: subStep('Cocktail Hour — Jazz', 'Which jazz act?', 'cocktail_act',
+    ['austin_g','roma_echo','soul_district','chateau_jazz','cocktail_duo','velvet_jazz_duo','after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66','italian_quartet','velvet_jazz','de_la_jazz'],
+    [
+      { label:'Solo',    keys:['austin_g','roma_echo','soul_district'] },
+      { label:'Duo',     keys:['chateau_jazz','cocktail_duo','velvet_jazz_duo'] },
+      { label:'Trio',    keys:['after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66'] },
+      { label:'Quartet & Above', keys:['italian_quartet','velvet_jazz','de_la_jazz'] },
+    ], () => afterCocktailConfig()
+  ),
+  cocktail_acoustic: subStep('Cocktail Hour — Acoustic', 'Which acoustic act?', 'cocktail_act',
+    ['nick_k','danny_v','jordan_d','jesse_p','lilia_l','chris_w','americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo','dueling_piano','velvet_jazz_duo','cocktail_duo','bossa_groove','havana_duo','island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'],
+    [
+      { label:'Blitz Elite', keys:['nick_k','danny_v','jordan_d','jesse_p','lilia_l','chris_w'] },
+      { label:'Solo', keys:['americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo'] },
+      { label:'Duo',  keys:['dueling_piano','velvet_jazz_duo','cocktail_duo','bossa_groove','havana_duo'] },
+      { label:'Trio', keys:['island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'] },
+    ], () => afterCocktailConfig()
+  ),
+  cocktail_roaming: subStep('Cocktail Hour — Roaming', 'Which roaming act?', 'cocktail_act',
+    ['roaming_sax','the_roams_duo','the_roams_trio','the_roams_quartet','alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Roaming — Solo',       keys:['roaming_sax'] },
+      { label:'The Roams — Duo / Trio / Quartet', keys:['the_roams_duo','the_roams_trio','the_roams_quartet'] },
+      { label:'Blitz Elite Soloists', keys:['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterCocktailConfig()
+  ),
+  cocktail_soloist: subStep('Cocktail Hour — Blitz Elite', 'Choose your named artist', 'cocktail_act',
+    ['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Saxophone',        keys:['alex_y','austin_g','jordan_d'] },
+      { label:'Violin',           keys:['jeremy_j','lilia_l','nick_k'] },
+      { label:'Guitar & Vocals',  keys:['chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterCocktailConfig(),
+    'Every Blitz Elite artist is a named individual — when you book them, you\'re guaranteed that specific person performs at your wedding.'
+  ),
+
+  // Cocktail — by size
+  cocktail_size_solo: subStep('Cocktail Hour — Solo', 'What style of solo act suits your day?', 'cocktail_act',
+    ['sunset_violin','harp_nation','roma_echo','soul_district','americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo','roaming_sax','alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Strings',  keys:['sunset_violin','harp_nation'] },
+      { label:'Jazz',     keys:['roma_echo','soul_district'] },
+      { label:'Acoustic', keys:['americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo'] },
+      { label:'Roaming',  keys:['roaming_sax'] },
+      { label:'Blitz Elite', keys:['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterCocktailConfig()
+  ),
+  cocktail_size_duo: subStep('Cocktail Hour — Duo', 'What style of duo suits your day?', 'cocktail_act',
+    ['elegant_harmony','sunset_strings','chateau_jazz','cocktail_duo','velvet_jazz_duo','dueling_piano','bossa_groove','havana_duo','the_roams_duo'],
+    [
+      { label:'Strings',  keys:['elegant_harmony','sunset_strings'] },
+      { label:'Jazz',     keys:['chateau_jazz','cocktail_duo','velvet_jazz_duo'] },
+      { label:'Acoustic', keys:['dueling_piano','bossa_groove','havana_duo'] },
+      { label:'Roaming',  keys:['the_roams_duo'] },
+    ], () => afterCocktailConfig()
+  ),
+  cocktail_size_trio: subStep('Cocktail Hour — Trio', 'What style of trio suits your day?', 'cocktail_act',
+    ['belle_trio','string_nation','blitz_quartet','second_strings','after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66','ritmo_del_sol','latin_cuban_trio','dusty_roads','the_roams_trio'],
+    [
+      { label:'Strings',  keys:['belle_trio','string_nation','blitz_quartet','second_strings'] },
+      { label:'Jazz',     keys:['after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66'] },
+      { label:'Acoustic', keys:['island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'] },
+      { label:'Roaming',  keys:['the_roams_trio'] },
+    ], () => afterCocktailConfig()
+  ),
+  cocktail_size_quartet: subStep('Cocktail Hour — Quartet & Above', 'What style suits your day?', 'cocktail_act',
+    ['string_nation','blitz_quartet','second_strings','luxe_strings','velvet_jazz','de_la_jazz','the_roams_quartet'],
+    [
+      { label:'Strings',  keys:['string_nation','blitz_quartet','second_strings'] },
+      { label:'Strings — 5-Piece', keys:['luxe_strings'] },
+      { label:'Jazz',     keys:['velvet_jazz','de_la_jazz'] },
+      { label:'Roaming',  keys:['the_roams_quartet'] },
+    ], () => afterCocktailConfig()
+  ),
+
+  // ── DINNER: music type picker ───────────────────────────────
+  dinner_music_type: {
+    section:'Dinner Music',
+    title:'What kind of music for Dinner?',
+    subtitle: () => ans.journey === 'both'
+      ? 'These are specialist acts separate from your reception band.'
+      : 'Browse by the genre you have in mind, or by the size of ensemble.',
+    type:'music_picker', key:'dinner_music_type',
+    next: () => musicPickNext(ans.dinner_music_type, 'dinner', afterDinnerConfig),
+  },
+
+  // Dinner — by genre
+  dinner_strings: subStep('Dinner — Strings', 'What style of strings suits your day?', 'dinner_act',
+    ['sunset_violin','harp_nation','elegant_harmony','sunset_strings','belle_trio','string_nation','blitz_quartet','second_strings','luxe_strings'],
+    [
+      { label:'Solo',                 keys:['sunset_violin','harp_nation'] },
+      { label:'Duo',                  keys:['elegant_harmony','sunset_strings'] },
+      { label:'Trio',                 keys:['belle_trio'] },
+      { label:'Trio / Quartet',       keys:['blitz_quartet'] },
+      { label:'Duo / Trio / Quartet', keys:['string_nation','second_strings'] },
+      { label:'5-Piece',              keys:['luxe_strings'] },
+    ], () => {
+      const flex = ['string_nation','second_strings','blitz_quartet'];
+      return flex.includes(ans.dinner_act) ? 'dinner_strings_size' : afterDinnerConfig();
+    }
+  ),
+  dinner_strings_size: {
+    section: 'Dinner — Strings',
+    get title() { return `You selected ${(ACT_DATA[ans.dinner_act]||{name:'this ensemble'}).name}`; },
+    subtitle: 'How many musicians would you like?',
+    type: 'strings_confirm',
+    sourceKey: 'dinner_act',
+    key: 'dinner_strings_size',
+    next: () => afterDinnerConfig(),
+  },
+  dinner_jazz: subStep('Dinner — Jazz', 'Which jazz act?', 'dinner_act',
+    ['austin_g','roma_echo','soul_district','chateau_jazz','cocktail_duo','velvet_jazz_duo','after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66','italian_quartet','velvet_jazz','de_la_jazz'],
+    [
+      { label:'Solo',    keys:['austin_g','roma_echo','soul_district'] },
+      { label:'Duo',     keys:['chateau_jazz','cocktail_duo','velvet_jazz_duo'] },
+      { label:'Trio',    keys:['after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66'] },
+      { label:'Quartet & Above', keys:['italian_quartet','velvet_jazz','de_la_jazz'] },
+    ], () => afterDinnerConfig()
+  ),
+  dinner_acoustic: subStep('Dinner — Acoustic', 'Which acoustic act?', 'dinner_act',
+    ['nick_k','danny_v','jordan_d','jesse_p','lilia_l','chris_w','americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo','dueling_piano','velvet_jazz_duo','cocktail_duo','bossa_groove','havana_duo','island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'],
+    [
+      { label:'Blitz Elite', keys:['nick_k','danny_v','jordan_d','jesse_p','lilia_l','chris_w'] },
+      { label:'Solo', keys:['americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo'] },
+      { label:'Duo',  keys:['dueling_piano','velvet_jazz_duo','cocktail_duo','bossa_groove','havana_duo'] },
+      { label:'Trio', keys:['island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'] },
+    ], () => afterDinnerConfig()
+  ),
+  dinner_roaming: subStep('Dinner — Roaming', 'Which roaming act?', 'dinner_act',
+    ['roaming_sax','the_roams_duo','the_roams_trio','the_roams_quartet','alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Roaming — Solo',       keys:['roaming_sax'] },
+      { label:'The Roams — Duo / Trio / Quartet', keys:['the_roams_duo','the_roams_trio','the_roams_quartet'] },
+      { label:'Blitz Elite Soloists', keys:['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterDinnerConfig()
+  ),
+  dinner_soloist: subStep('Dinner — Blitz Elite', 'Choose your named artist', 'dinner_act',
+    ['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Saxophone',        keys:['alex_y','austin_g','jordan_d'] },
+      { label:'Violin',           keys:['jeremy_j','lilia_l','nick_k'] },
+      { label:'Guitar & Vocals',  keys:['chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterDinnerConfig(),
+    'Every Blitz Elite artist is a named individual — when you book them, you\'re guaranteed that specific person performs at your wedding.'
+  ),
+
+  // Dinner — by size
+  dinner_size_solo: subStep('Dinner — Solo', 'What style of solo act suits your day?', 'dinner_act',
+    ['sunset_violin','harp_nation','roma_echo','soul_district','americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo','roaming_sax','alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'],
+    [
+      { label:'Strings',  keys:['sunset_violin','harp_nation'] },
+      { label:'Jazz',     keys:['roma_echo','soul_district'] },
+      { label:'Acoustic', keys:['americana_guitar','beach_boy','ivory_rebel','melody_weaver','smooth_riffs','smooth_tones','soul_strummer','soulful_keys','soulful_serenade','solo_piano','lindsay_opera','luna_lix','melody_road','melody_storm','moon_melody','piano_songbird','pixie_darling','raine_solo','chord_charm','electric_solo','rockin_ridge','groove_strummer','spanish_guitar','the_piano_man','acoustic_solo'] },
+      { label:'Roaming',  keys:['roaming_sax'] },
+      { label:'Blitz Elite', keys:['alex_y','austin_g','jordan_d','jeremy_j','lilia_l','nick_k','chris_w','danny_v','jesse_p','sam_s'] },
+    ], () => afterDinnerConfig()
+  ),
+  dinner_size_duo: subStep('Dinner — Duo', 'What style of duo suits your day?', 'dinner_act',
+    ['elegant_harmony','sunset_strings','chateau_jazz','cocktail_duo','velvet_jazz_duo','dueling_piano','bossa_groove','havana_duo','the_roams_duo'],
+    [
+      { label:'Strings',  keys:['elegant_harmony','sunset_strings'] },
+      { label:'Jazz',     keys:['chateau_jazz','cocktail_duo','velvet_jazz_duo'] },
+      { label:'Acoustic', keys:['dueling_piano','bossa_groove','havana_duo'] },
+      { label:'Roaming',  keys:['the_roams_duo'] },
+    ], () => afterDinnerConfig()
+  ),
+  dinner_size_trio: subStep('Dinner — Trio', 'What style of trio suits your day?', 'dinner_act',
+    ['belle_trio','string_nation','blitz_quartet','second_strings','after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66','ritmo_del_sol','latin_cuban_trio','dusty_roads','the_roams_trio'],
+    [
+      { label:'Strings',  keys:['belle_trio','string_nation','blitz_quartet','second_strings'] },
+      { label:'Jazz',     keys:['after_hours_trio','velvet_jazz_trio','italian_jazz_trio','bay_noir','route_66'] },
+      { label:'Acoustic', keys:['island_pulse','wave_riders','ritmo_del_sol','latin_cuban_trio','dusty_roads'] },
+      { label:'Roaming',  keys:['the_roams_trio'] },
+    ], () => afterDinnerConfig()
+  ),
+  dinner_size_quartet: subStep('Dinner — Quartet & Above', 'What style suits your day?', 'dinner_act',
+    ['string_nation','blitz_quartet','second_strings','luxe_strings','velvet_jazz','de_la_jazz','the_roams_quartet'],
+    [
+      { label:'Strings',  keys:['string_nation','blitz_quartet','second_strings'] },
+      { label:'Strings — 5-Piece', keys:['luxe_strings'] },
+      { label:'Jazz',     keys:['velvet_jazz','de_la_jazz'] },
+      { label:'Roaming',  keys:['the_roams_quartet'] },
+    ], () => afterDinnerConfig()
+  ),
+
+  // ── CEREMONY DETAILS ───────────────────────────────────────
+  ceremony_details: {
+    section:'Ceremony Details',
+    title:'A couple of ceremony details',
+    subtitle:'This helps us plan timings and the right sound setup.',
+    type:'ceremony_details',
+    next: () => 'ceremony_vows_sound',
+  },
+  ceremony_vows_sound: {
+    section:'Ceremony Details',
+    title:'Do you need sound equipment for your vows?',
+    subtitle:'We can provide microphones and speakers so every guest hears your vows clearly.',
+    type:'single', key:'ceremony_vows_sound', cols:1,
+    options:[
+      { value:'yes', label:'Yes — please provide microphones & speakers', desc:'Ideal for outdoor ceremonies or larger venues' },
+      { value:'no',  label:'No — the venue has this covered' },
+    ],
+    next: () => afterCeremonyDetails(),
+  },
+  speeches_sound: {
+    section:'Reception Details',
+    title:'Do you need sound & microphones for speeches?',
+    type:'single', key:'speeches_sound', cols:1,
+    options:[
+      { value:'yes', label:'Yes — please handle this',     desc:"We'll manage sound for all toasts and speeches" },
+      { value:'no',  label:'No — the venue has it covered' },
+    ],
+    next: () => ans.journey === 'both' ? 'both_savings_offer' : 'dj_mc_addon',
+  },
+
+  // ── FULL BAND ──────────────────────────────────────────────
+  band_size: {
+    section: () => ans.journey === 'both' ? 'Reception — Full Band' : 'Full Band',
+    title:'What size band are you looking for?',
+    subtitle:'Bigger bands bring a bigger show — more musicians means more energy and a fuller sound.',
+    type:'single', key:'band_size', cols:1,
+    options:[
+      { value:'4_5',      label:'4 – 5 Piece',               desc:'Blitz House Band, Rock Nation, Blitz Fusion',         badge:'$' },
+      { value:'6_8',      label:'6 – 8 Piece',               desc:'Viva, Fortune West, The Rumours, Late Night & more',  badge:'$$' },
+      { value:'9_11',     label:'9 – 11 Piece',              desc:'Viva, Fortune West, The Rumours, Late Night & more',  badge:'$$$', popular:true },
+      { value:'12_15',    label:'12 – 15 Piece',             desc:'Viva, Fortune West, Late Night',                      badge:'$$$$' },
+      { value:'orchestra',label:'Band + Orchestra (up to 40)',desc:'The ultimate wedding show',                          badge:'$$$$$' },
+    ],
+    next: () => 'band_selection',
+  },
+  band_selection: {
+    section:'Full Band',
+    title: () => `Which band for your ${bandSizeLabel()}?`,
+    subtitle:'Every band has a unique style — the showreel will give you the full picture.',
+    type:'band_cards', key:'band_selection',
+    options: () => bandOptions(),
+    next: () => 'reception_details',
+  },
+  reception_details: {
+    section:'Reception Details',
+    title:'A couple of quick details',
+    subtitle:'This helps us plan set times and logistics for the evening.',
+    type:'reception_details',
+    next: () => 'dj_mc_addon',
+  },
+  dj_mc_addon: {
+    section:'DJ & MC',
+    title:'Would you like a DJ / MC for your wedding?',
+    subtitle: () => ans.journey === 'ceremony'
+      ? 'A DJ/MC can handle music transitions, manage the room atmosphere, and keep guests informed throughout the day.'
+      : 'We recommend a DJ/MC to fill gaps between sets, manage song cues for key moments, and keep energy high all night — at a discounted rate when booked with the band.',
+    type:'single', key:'dj_mc_addon', cols:1,
+    options:[
+      { value:'yes',   label:'Yes — add a DJ/MC',    desc:'Discounted rate when booked alongside live music' },
+      { value:'no',    label:'No thanks',             desc:'Live music only' },
+      { value:'maybe', label:'Tell me more first',    desc:"We'll go through the options in the consultation" },
+    ],
+    next: () => {
+      if (ans.journey === 'both')     return 'ceremony_times';
+      if (ans.journey === 'ceremony') return 'contact_details';
+      return 'additional_options';
+    },
+  },
+  additional_options: {
+    section:'Extras & Add-ons',
+    title:'Would you like to explore additional extras?',
+    subtitle:'All bands include professional sound, backline, and basic stage lighting. We also offer some spectacular add-ons.',
+    type:'single', key:'additional_options', cols:1,
+    options:[
+      { value:'yes',   label:"Yes — show me what's available",   desc:'Lighting, staging, dance floors, podiums & more' },
+      { value:'no',    label:'No — the band is everything I need' },
+      { value:'later', label:"Maybe — let's discuss in the consultation" },
+    ],
+    next: () => ans.additional_options === 'yes' ? 'extra_lighting' : 'extra_items',
+  },
+
+  // ── EXTRAS ────────────────────────────────────────────────
+  extra_lighting: {
+    section:'Extras', title:'Concert & stage lighting?',
+    heroKey:'extra_lighting',
+    type:'single', key:'extra_lighting', cols:1,
+    options:[
+      { value:'yes',   label:'Yes — concert lighting please', desc:'Transform your venue into a live concert experience' },
+      { value:'no',    label:'Basic stage lights are fine' },
+      { value:'maybe', label:'Tell me more in the consultation' },
+    ],
+    next: () => ans.extra_lighting === 'yes' ? 'lighting_packages' : 'extra_stage',
+  },
+  lighting_packages: {
+    section:'Extras — Lighting',
+    title:'Which lighting package?',
+    subtitle:'Each package creates a different atmosphere — the team will walk you through the details in your consultation.',
+    type:'lighting_cards', key:'lighting_package',
+    pkgKeys:['opener','showcase','portman','headliner','dj_small','dj_medium','dj_large'],
+    next: () => 'extra_stage',
+  },
+  extra_stage: {
+    section:'Extras', title:'Are you looking for a stage?',
+    heroKey:'extra_stage',
+    type:'single', key:'extra_stage', cols:1,
+    options:[
+      { value:'yes',   label:'Yes — we need a stage',                               desc:"We'll source, deliver and set it up" },
+      { value:'no',    label:'No — venue has a stage or floor performance is fine' },
+      { value:'maybe', label:'Not sure yet' },
+    ],
+    next: () => 'extra_dance_floor',
+  },
+  extra_dance_floor: {
+    section:'Extras', title:'Are you looking for a dance floor?',
+    heroKey:'extra_dance_floor',
+    type:'single', key:'extra_dance_floor', cols:1,
+    options:[
+      { value:'yes',   label:'Yes — we need a dance floor', desc:"We'll provide and install it" },
+      { value:'no',    label:'No — venue has this sorted' },
+      { value:'maybe', label:'Not sure yet' },
+    ],
+    next: () => 'extra_podiums',
+  },
+  extra_podiums: {
+    section:'Extras', title:'Blitz Nation Podiums?',
+    heroKey:'extra_podiums',
+    type:'single', key:'extra_podiums', cols:1,
+    options:[
+      { value:'yes',   label:"Yes — we'd love this!", desc:'Add Blitz Nation Podiums to your event' },
+      { value:'no',    label:'No thanks' },
+      { value:'maybe', label:'Tell me more in the consultation' },
+    ],
+    next: () => 'extra_items',
+  },
+  extra_items: {
+    section:'Extras', title:'Any other extras?',
+    subtitle:"Select everything you're interested in, or choose None to continue.",
+    type:'extra_cards', key:'extra_items',
+    extraKeys:['uplights','photo_booth','sparklers','co2'],
+    next: () => afterBandExtras(),
+  },
+
+  // ── BOTH: SAVINGS ─────────────────────────────────────────
+  both_savings_offer: {
+    section:'A Smart Saving',
+    title:'Here\'s a way to make your budget go further',
+    subtitle: () => {
+      const lbl = k => ({ strings:'String ensemble',jazz:'Jazz ensemble',acoustic:'Acoustic act',roaming:'Roaming Act',
+        solo:'Solo act',duo:'Duo',trio:'Trio',quartet:'Quartet' })[k] || k;
+      const t = [];
+      if (hasCeremony() && ans.ceremony_music_type) t.push(`${lbl(ans.ceremony_music_type)} for the Ceremony`);
+      if (hasCocktail() && ans.cocktail_music_type) t.push(`${lbl(ans.cocktail_music_type)} for Cocktail Hour`);
+      if (hasDinner()   && ans.dinner_music_type)   t.push(`${lbl(ans.dinner_music_type)} for Dinner`);
+      const chosen = t.length ? `You've chosen ${t.join(', ')}. ` : '';
+      return chosen + 'Since your band musicians will already be at your venue, they can cover any of those moments at a reduced rate — same quality, better value.';
+    },
+    type:'single', key:'both_savings_take', cols:1,
+    options:[
+      { value:'yes',     label:'Yes — show me the discounted option',    desc:"We'll let you choose which moments to cover with band musicians" },
+      { value:'no',      label:'Keep my original selections',             desc:'Proceed with the specialist acts already chosen' },
+      { value:'discuss', label:"Let's discuss this in the consultation",  desc:'The team will walk you through the options in detail' },
+    ],
+    next: () => ans.both_savings_take === 'yes' ? 'both_savings_moments' : 'additional_options',
+  },
+  both_savings_moments: {
+    section:'Smart Saving — Which Moments?',
+    title:'Which moments would you like band musicians to cover?',
+    subtitle:'The team will match the best available line-up from your band for each moment.',
+    type:'multi', key:'both_savings_moments', cols:1,
+    options: () => {
+      const lbl = k => ({ strings:'String ensemble',jazz:'Jazz ensemble',acoustic:'Acoustic act',roaming:'Roaming Act',
+        solo:'Solo act',duo:'Duo',trio:'Trio',quartet:'Quartet' })[k]||k;
+      const o = [];
+      if (hasCeremony()) o.push({ value:'ceremony', label:'Ceremony',     desc: ans.ceremony_music_type ? `You chose: ${lbl(ans.ceremony_music_type)}` : '' });
+      if (hasCocktail()) o.push({ value:'cocktail', label:'Cocktail Hour',desc: ans.cocktail_music_type ? `You chose: ${lbl(ans.cocktail_music_type)}` : '' });
+      if (hasDinner())   o.push({ value:'dinner',   label:'Dinner',       desc: ans.dinner_music_type   ? `You chose: ${lbl(ans.dinner_music_type)}`   : '' });
+      return o;
+    },
+    next: () => 'additional_options',
+  },
+
+  // ── DJ / LIVE ─────────────────────────────────────────────
+  dj_type: {
+    section:'DJ & Live',
+    title:'What kind of experience are you looking for?',
+    type:'single', key:'dj_type', cols:1,
+    options:[
+      { value:'dj_only',      label:'DJ / MC Only',                            desc:'A professional DJ and MC to run your entire evening' },
+      { value:'fusion',       label:'Blitz Fusion — DJ + Live (1–4 musicians)', desc:'DJ energy fused with live musicians for a unique hybrid experience' },
+      { value:'fusion_large', label:'Blitz Fusion Large — DJ + Live (5–7)',     desc:'A fuller live band meets DJ — spectacular energy throughout the night' },
+      { value:'late_night',   label:'Late Night — DJ + Live Vocals',            desc:'DJ with powerhouse live vocalists — the ultimate late-night experience' },
+    ],
+    next: () => ({ dj_only:'dj_ceremony_addon', fusion:'fusion_config', fusion_large:'fusion_large_config', late_night:'late_night_config' })[ans.dj_type],
+  },
+  fusion_config: {
+    section:'Blitz Fusion', title:'Which Blitz Fusion line-up?',
+    subtitle:'Choose a preset or build your own custom combination.',
+    type:'single', key:'fusion_config', cols:1,
+    options:[
+      { value:'dj_sax',    label:'DJ + Saxophone',        desc:'The classic pairing — smooth, electric, instantly recognisable' },
+      { value:'dj_violin', label:'DJ + Violin',           desc:'Unexpected and stunning — a real talking point' },
+      { value:'reggae',    label:'Blitz Fusion Reggae',   desc:'2 instruments — reggae-infused DJ/Live' },
+      { value:'latin',     label:'Blitz Fusion Latin',    desc:'2 instruments — Latin rhythms with live musicians' },
+      { value:'signature', label:'Blitz Fusion Signature',desc:'Saxophone, Violin & Percussion — our most popular', popular:true },
+      { value:'horns',     label:'Blitz Fusion Horns',    desc:'Saxophone, Trumpet & Trombone — big brass energy' },
+      { value:'custom',    label:'Blitz Fusion Custom',   desc:'Choose 1–4 instruments from our full roster' },
+    ],
+    next: () => ans.fusion_config === 'custom' ? 'fusion_custom_count' : 'dj_ceremony_addon',
+  },
+  fusion_custom_count: {
+    section:'Blitz Fusion — Custom', title:'How many live instruments?',
+    type:'single', key:'fusion_custom_count', cols:2,
+    options:[{value:'1',label:'1'},{value:'2',label:'2'},{value:'3',label:'3'},{value:'4',label:'4'}],
+    next: () => 'fusion_custom_instruments',
+  },
+  fusion_custom_instruments: {
+    section:'Blitz Fusion — Custom', title: () => `Choose your ${ans.fusion_custom_count} instrument(s)`,
+    type:'multi', key:'fusion_custom_instruments', cols:2,
+    options:[
+      {value:'sax',label:'Saxophone'},{value:'violin',label:'Violin'},{value:'trumpet',label:'Trumpet'},
+      {value:'trombone',label:'Trombone'},{value:'percussion',label:'Percussion'},{value:'drum_kit',label:'Full Drum Kit'},
+      {value:'guitar',label:'Guitar'},{value:'keyboard',label:'Keyboard'},{value:'other',label:"Other — let's discuss"},
+    ],
+    next: () => 'dj_ceremony_addon',
+  },
+  fusion_large_config: {
+    section:'Blitz Fusion Large', title:'Which Blitz Fusion Large line-up?',
+    type:'single', key:'fusion_large_config', cols:1,
+    options:[
+      { value:'full_7',   label:'7 Musicians + DJ', desc:'3 Strings, 3 Horns & Percussion — the complete show', popular:true },
+      { value:'custom_5', label:'5 Musicians + DJ', desc:'Build your own 5-piece configuration' },
+      { value:'custom_6', label:'6 Musicians + DJ', desc:'Build your own 6-piece configuration' },
+    ],
+    next: () => 'dj_ceremony_addon',
+  },
+  late_night_config: {
+    section:'Late Night', title:'Which Late Night package?',
+    type:'single', key:'late_night_config', cols:1,
+    options:[
+      { value:'lite',   label:'Late Night Lite',  desc:'DJ with one vocalist — intimate and irresistible' },
+      { value:'full',   label:'Late Night Full',  desc:'DJ with full vocal line-up — the complete experience', popular:true },
+      { value:'custom', label:'Late Night Custom',desc:"Tell us what you're envisioning and we'll build it" },
+    ],
+    next: () => 'dj_ceremony_addon',
+  },
+  dj_ceremony_addon: {
+    section:'Ceremony Add-on',
+    title:'Would you like live music for the earlier parts of your day?',
+    subtitle:'We can provide live musicians for ceremony, cocktail hour, or dinner alongside your DJ/Live package.',
+    type:'single', key:'dj_ceremony_addon', cols:1,
+    options:[
+      { value:'band_musicians', label:'Yes — using musicians from the DJ/Live line-up', desc:'Same musicians at a discounted rate' },
+      { value:'separate',       label:'Yes — bring in separate specialist musicians',  desc:'Strings, jazz, acoustic — full options' },
+      { value:'both',           label:"Yes — let's explore both options" },
+      { value:'no',             label:'No — just the DJ/Live for the reception' },
+    ],
+    next: () => {
+      if (ans.dj_ceremony_addon === 'no') return 'dj_podiums';
+      return 'ceremony_times';
+    },
+  },
+  dj_ceremony_lineup: {
+    section:'Ceremony — DJ/Live Musicians', title:'What line-up for Ceremony / Cocktail Hour?',
+    subtitle:'Roaming Saxophone is the most popular choice.',
+    type:'single', key:'dj_ceremony_lineup', cols:1,
+    options:[
+      { value:'roaming_sax', label:'Roaming Saxophone — Most Popular', desc:'A saxophonist who mingles through the crowd' },
+      { value:'sax',    label:'Saxophone (Stage)' },
+      { value:'violin', label:'Violin' },
+      { value:'guitar', label:'Guitar' },
+      { value:'keys',   label:'Keys' },
+      { value:'trumpet',label:'Trumpet' },
+    ],
+    next: () => 'dj_podiums',
+  },
+  dj_podiums: {
+    section:'Extras', title:'Blitz Nation Podiums?',
+    heroKey:'extra_podiums',
+    type:'single', key:'dj_podiums', cols:1,
+    options:[
+      { value:'yes',   label:"Yes — this sounds incredible!", desc:'Add Blitz Nation Podiums to the event' },
+      { value:'no',    label:'No thanks' },
+      { value:'maybe', label:'Tell me more in the consultation' },
+    ],
+    next: () => 'extra_items_dj',
+  },
+  extra_items_dj: {
+    section:'Extras', title:'Any other extras?',
+    subtitle:"Select everything you're interested in, or choose None to continue.",
+    type:'extra_cards', key:'extra_items',
+    extraKeys:['uplights','photo_booth','sparklers','co2'],
+    next: () => 'contact_details',
+  },
+
+  // ── CONTACT + SUMMARY ─────────────────────────────────────
+  contact_details: {
+    section:'Almost There',
+    title:'Tell us about yourself',
+    subtitle:"We'll come back to you within 24 hours with a personalised quote and availability check.",
+    type:'contact',
+    next: () => 'summary',
+  },
+  summary: {
+    section:'Your Enquiry',
+    title:'Your wedding music plan',
+    subtitle:"Review everything below. When you're ready, hit Send and the Blitz Nation team will be in touch.",
+    type:'summary',
+    next: () => null,
+  },
+};
+
+// ── STEP RESOLVER ────────────────────────────────────────────
+function getStep(id) {
+  const s = steps[id];
+  if (!s) return null;
+  return { ...s, id,
+    section: typeof s.section  === 'function' ? s.section()  : s.section,
+    title:   typeof s.title    === 'function' ? s.title()    : s.title,
+    subtitle:typeof s.subtitle === 'function' ? s.subtitle() : s.subtitle,
+    options: typeof s.options  === 'function' ? s.options()  : s.options,
+  };
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+function goNext() {
+  const step = getStep(cur);
+  if (!step) return;
+  if (step.type === 'contact') { if (!captureContact()) { doShake(); return; } push(step.next()); return; }
+  if (step.type === 'summary') { sendEnquiry(); return; }
+  if (!hasValue(step)) { doShake(); return; }
+  const nxt = step.next();
+  if (nxt) push(nxt);
+}
+function goBack() {
+  if (hist.length <= 1) return;
+  hist.pop(); cur = hist[hist.length - 1]; render();
+}
+function push(id) { hist.push(id); cur = id; render(); }
+
+function hasValue(s) {
+  if (s.type === 'single' || s.type === 'band_cards' || s.type === 'act_cards' || s.type === 'music_picker' || s.type === 'lighting_cards') return !!ans[s.key];
+  if (s.type === 'multi')             return (ans[s.key]||[]).length > 0;
+  if (s.type === 'time')              return !!ans[s.key];
+  if (s.type === 'number')            return !!ans[s.key];
+  if (s.type === 'reception_details') return !!(ans.reception_time && ans.band_guest_count);
+  if (s.type === 'ceremony_details')  return !!ans.event_arrival_time;
+  if (s.type === 'extra_cards')       return (ans[s.key]||[]).length > 0;
+  if (s.type === 'strings_confirm')   return !!ans[s.key];
+  return true;
+}
+
+function doShake() {
+  const b = document.getElementById('btnNext');
+  b.style.animation='none'; b.offsetHeight; b.style.animation='shake .35s ease';
+}
+function selectOpt(key, value, multi) {
+  if (multi) {
+    if (!ans[key]) ans[key] = [];
+    const i = ans[key].indexOf(value);
+    if (i===-1) ans[key].push(value); else ans[key].splice(i,1);
+  } else { ans[key] = value; }
+  renderStep(getStep(cur)); updateNav();
+}
+function selectExtra(key, value) {
+  if (!ans[key]) ans[key] = [];
+  if (value === 'none') { ans[key] = ['none']; }
+  else {
+    ans[key] = ans[key].filter(v => v !== 'none');
+    const i = ans[key].indexOf(value);
+    if (i===-1) ans[key].push(value); else ans[key].splice(i,1);
+  }
+  renderStep(getStep(cur)); updateNav();
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function render() {
+  const step = getStep(cur);
+  if (!step) return;
+  renderStep(step); updateProgress(); updateNav(); window.scrollTo(0,0);
+}
+function renderStep(step) {
+  const w = document.getElementById('sw');
+  let h = '';
+  if (step.section) h += `<div class="s-sec">${step.section}</div>`;
+  h += `<h1 class="s-title">${step.title}</h1>`;
+  if (step.subtitle) h += `<p class="s-sub">${step.subtitle}</p>`;
+  if (step.heroKey) {
+    const d = EXTRA_DATA[step.heroKey];
+    h += `<div class="extra-hero">${d&&d.photo?`<img src="${d.photo}" alt="${d.name}">`:'<span class="extra-hero-ph">Photo placeholder</span>'}</div>`;
+  }
+  switch(step.type) {
+    case 'single':           h += renderOpts(step, false); break;
+    case 'multi':            h += renderOpts(step, true);  break;
+    case 'music_picker':     h += renderMusicPicker(step); break;
+    case 'band_cards':       h += renderBandCards(step);   break;
+    case 'act_cards':        h += renderActCards(step);      break;
+    case 'extra_cards':      h += renderExtraCards(step);    break;
+    case 'lighting_cards':   h += renderLightingCards(step); break;
+    case 'strings_confirm':  h += renderStringsConfirm(step); break;
+    case 'time':             h += renderTime(step);        break;
+    case 'number':           h += renderNumber(step);      break;
+    case 'reception_details':h += renderSplitFields('rec_time','Reception start time','time',ans.reception_time,'reception_time','rec_guests','Number of guests','number',ans.band_guest_count,'band_guest_count'); break;
+    case 'ceremony_details': h += renderSplitFields('cer_time','Guest arrival time','time',ans.event_arrival_time,'event_arrival_time','cer_guests','Number of guests','number',ans.ceremony_guest_count,'ceremony_guest_count'); break;
+    case 'contact':          h += renderContact(); break;
+    case 'summary':          h += renderSummary(); break;
+  }
+  w.innerHTML = h;
+  w.style.animation='none'; w.offsetHeight; w.style.animation='rise .28s ease both';
+}
+
+function renderOpts(step, multi) {
+  let h = `<div class="opts${step.cols===2?' c2':''}">`;
+  for (const o of (step.options||[])) {
+    const sel = multi ? (ans[step.key]||[]).includes(o.value) : ans[step.key]===o.value;
+    h += `<div class="opt${sel?' sel':''}" onclick="selectOpt('${step.key}','${o.value}',${multi})">`;
+    h += multi ? `<div class="ind-sq">${sel?'✓':''}</div>` : `<div class="indicator">${sel?'✓':''}</div>`;
+    h += `<div class="opt-body"><div class="opt-label">${o.label}</div>`;
+    if (o.desc) h += `<div class="opt-desc">${o.desc}</div>`;
+    h += `</div>`;
+    if (o.popular) h += `<div class="badge b-pop">Most Popular</div>`;
+    else if (o.badge) h += `<div class="badge b-tier">${o.badge}</div>`;
+    h += `</div>`;
+  }
+  return h + '</div>';
+}
+
+function renderMusicPicker(step) {
+  const key = step.key;
+  const cur = ans[key];
+  const genres = [
+    { value:'strings',  label:'Strings',       desc:'Classical & contemporary' },
+    { value:'jazz',     label:'Jazz',           desc:'Smooth & sophisticated' },
+    { value:'acoustic', label:'Acoustic',       desc:'Warm & intimate' },
+    { value:'soloist',  label:'Blitz Elite',    desc:'Book a named individual artist' },
+    { value:'roaming',  label:'Roaming',        desc:'Musicians who mingle' },
+  ];
+  const sizes = [
+    { value:'solo',    label:'Solo',    desc:'1 musician' },
+    { value:'duo',     label:'Duo',     desc:'2 musicians' },
+    { value:'trio',    label:'Trio',    desc:'3 musicians' },
+    { value:'quartet', label:'Quartet', desc:'4 musicians' },
+  ];
+  let h = `<div class="picker-group-label">Browse by genre</div><div class="opts c2">`;
+  for (const g of genres) {
+    const sel = cur === g.value;
+    h += `<div class="opt${sel?' sel':''}" onclick="selectOpt('${key}','${g.value}',false)">
+      <div class="indicator">${sel?'✓':''}</div>
+      <div class="opt-body"><div class="opt-label">${g.label}</div><div class="opt-desc">${g.desc}</div></div>
+    </div>`;
+  }
+  h += `</div><div class="picker-divider">or browse by size</div><div class="size-row">`;
+  for (const s of sizes) {
+    const sel = cur === s.value;
+    h += `<div class="size-opt${sel?' sel':''}" onclick="selectOpt('${key}','${s.value}',false)">
+      <div class="size-opt-label">${s.label}</div>
+      <div class="size-opt-desc">${s.desc}</div>
+    </div>`;
+  }
+  return h + '</div>';
+}
+
+function renderBandCards(step) {
+  let h = '<div class="band-grid">';
+  for (const key of (step.options||[])) {
+    const d = BAND_DATA[key] || { name:key, range:'—', genre:'—', desc:'Details coming soon.', photo:null, video:null };
+    const sel = ans[step.key] === key;
+    h += `<div class="band-card${sel?' sel':''}" onclick="selectOpt('${step.key}','${key}',false)">
+      <div class="band-media">
+        ${d.photo?`<img src="${d.photo}" alt="${d.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:'<span class="ph-label">Photo placeholder</span>'}
+        <button class="vbtn${d.video?'':' disabled'}" onclick="event.stopPropagation();${d.video?`openBandVideo('${key}')`:'void(0)'}">
+          <span class="pi${d.video?'':' grey'}"></span>${d.video?'Watch Showreel':'Video coming soon'}
+        </button>
+      </div>
+      <div class="band-body">
+        <div class="band-info">
+          <div class="band-name">${d.name}</div>
+          <div class="band-tags"><span class="band-tag">${d.range}</span><span class="band-tag">${d.genre}</span></div>
+          <div class="band-desc">${d.desc}</div>
+        </div>
+        <div class="band-chk">${sel?'✓':''}</div>
+      </div>
+    </div>`;
+  }
+  return h + '</div>';
+}
+
+function renderLightingCards(step) {
+  let h = '<div class="band-grid">';
+  for (const key of (step.pkgKeys||[])) {
+    const d = LIGHTING_DATA[key] || { name:key, desc:'', photo:null };
+    const sel = ans[step.key] === key;
+    h += `<div class="band-card${sel?' sel':''}" onclick="selectOpt('${step.key}','${key}',false)">
+      <div class="band-media">
+        ${d.photo?`<img src="${d.photo}" alt="${d.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:'<span class="ph-label">Photo placeholder</span>'}
+      </div>
+      <div class="band-body">
+        <div class="band-info">
+          <div class="band-name">${d.name}</div>
+          <div class="band-desc">${d.desc}</div>
+        </div>
+        <div class="band-chk">${sel?'✓':''}</div>
+      </div>
+    </div>`;
+  }
+  return h + '</div>';
+}
+
+function renderActCards(step) {
+  const key = step.key;
+  if (step.groups) {
+    let h = '';
+    for (const g of step.groups) {
+      h += `<div class="act-section-label">${g.label}</div><div class="act-grid">`;
+      for (const ak of g.keys) h += actCardHtml(ak, key);
+      h += '</div>';
+    }
+    return h;
+  }
+  return `<div class="act-grid">${(step.actKeys||[]).map(ak => actCardHtml(ak, key)).join('')}</div>`;
+}
+
+function actCardHtml(actKey, stateKey) {
+  const d = ACT_DATA[actKey] || { name:actKey, sub:'', desc:'Details coming soon.', photo:null, video:null };
+  const sel = ans[stateKey] === actKey;
+  const vidBtn = d.video
+    ? `<button class="watch-vid-btn" onclick="event.stopPropagation();openActVideo('${actKey}')">Watch Video</button>`
+    : `<button class="watch-vid-btn" disabled>Video coming soon</button>`;
+  return `<div class="act-card${sel?' sel':''}" onclick="selectOpt('${stateKey}','${actKey}',false)">
+    <div class="act-media">
+      ${d.photo?`<img src="${d.photo}" alt="${d.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:'<span class="ph-label" style="font-size:11px">Photo placeholder</span>'}
+    </div>
+    <div class="act-body">
+      <div class="act-info">
+        ${d.sub?`<div class="act-sub">${d.sub}</div>`:''}
+        <div class="act-name">${d.name}${d.elite?' <span class="elite-badge">Blitz Elite</span>':''}${d.price?` <span class="price-tier">${d.price}</span>`:''}</div>
+        <div class="act-desc">${d.desc}</div>
+      </div>
+      <div class="act-chk">${sel?'✓':''}</div>
+    </div>
+    ${vidBtn}
+  </div>`;
+}
+
+function openVideoModal(name, ytUrl) {
+  const id = ytUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/)?.[1];
+  if (!id) return;
+  document.getElementById('videoTitle').textContent = name;
+  document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+  document.getElementById('videoModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function openActVideo(key) {
+  const d = ACT_DATA[key];
+  if (!d || !d.video) return;
+  openVideoModal(d.name, d.video);
+}
+function openBandVideo(key) {
+  const d = BAND_DATA[key];
+  if (!d || !d.video) return;
+  openVideoModal(d.name, d.video);
+}
+function closeVideo() {
+  document.getElementById('videoModal').style.display = 'none';
+  document.getElementById('videoFrame').src = '';
+  document.body.style.overflow = '';
+}
+
+function renderStringsConfirm(step) {
+  const actKey = ans[step.sourceKey];
+  const act = ACT_DATA[actKey] || {};
+  const sizeMap = {
+    string_nation:  [{value:'duo',label:'Duo',desc:'2 musicians'},{value:'trio',label:'Trio',desc:'3 musicians'},{value:'quartet',label:'Quartet',desc:'4 musicians'}],
+    second_strings: [{value:'duo',label:'Duo',desc:'2 musicians'},{value:'trio',label:'Trio',desc:'3 musicians'},{value:'quartet',label:'Quartet',desc:'4 musicians'}],
+    blitz_quartet:  [{value:'trio',label:'Trio',desc:'3 musicians'},{value:'quartet',label:'Quartet',desc:'4 musicians'}],
+  };
+  const sizes = sizeMap[actKey] || [];
+  const sel = ans[step.key];
+  let h = `<div class="confirm-card">`;
+  if (act.photo) {
+    h += `<img class="confirm-card-img" src="${act.photo}" alt="${act.name}">`;
+  } else {
+    h += `<div class="confirm-card-img-ph"></div>`;
+  }
+  h += `<div class="confirm-card-info">
+    <div class="confirm-card-label">Your selection</div>
+    <div class="confirm-card-name">${act.name||actKey}</div>
+    ${act.sub ? `<div class="confirm-card-sub">${act.sub}</div>` : ''}
+  </div></div>`;
+  h += `<div class="opts">`;
+  for (const o of sizes) {
+    const chosen = sel === o.value;
+    h += `<div class="opt${chosen?' sel':''}" onclick="selectOpt('${step.key}','${o.value}',false)">
+      <div class="indicator">${chosen?'✓':''}</div>
+      <div class="opt-body"><div class="opt-label">${o.label}</div>`;
+    if (o.desc) h += `<div class="opt-desc">${o.desc}</div>`;
+    h += `</div></div>`;
+  }
+  h += `</div>`;
+  return h;
+}
+
+function renderExtraCards(step) {
+  const key = step.key;
+  const selected = ans[key] || [];
+  let h = `<div class="extra-cards-grid">`;
+  for (const ek of (step.extraKeys||[])) {
+    const d = EXTRA_DATA[ek] || { name:ek, desc:'', photo:null };
+    const sel = selected.includes(ek);
+    h += `<div class="extra-card${sel?' sel':''}" onclick="selectExtra('${key}','${ek}')">
+      <div class="extra-media">${d.photo?`<img src="${d.photo}" alt="${d.name}">`:'<span class="ph-label" style="font-size:11px">Photo placeholder</span>'}</div>
+      <div class="extra-body">
+        <div class="extra-info"><div class="extra-name">${d.name}</div><div class="extra-desc">${d.desc}</div></div>
+        <div class="extra-chk">${sel?'✓':''}</div>
+      </div>
+    </div>`;
+  }
+  const nonesel = selected.includes('none');
+  h += `<div class="extra-card${nonesel?' sel':''}" onclick="selectExtra('${key}','none')" style="grid-column:1/-1">
+    <div class="extra-body" style="padding:16px 18px;gap:12px">
+      <div class="ind-sq${nonesel?' sel':''}" style="margin-top:0;flex-shrink:0">${nonesel?'✓':''}</div>
+      <div class="extra-info"><div class="extra-name">None of these — continue without extras</div></div>
+    </div>
+  </div>`;
+  return h + '</div>';
+}
+
+function renderSplitFields(id1,label1,type1,val1,key1,id2,label2,type2,val2,key2) {
+  const f = (id,label,type,val,key) =>
+    `<div class="split-field"><label class="split-label" for="${id}">${label}</label>
+    <input type="${type}" id="${id}" class="split-input" value="${val||''}"
+      placeholder="${type==='number'?'e.g. 200':''}"
+      ${type==='time'?'onchange':'oninput'}="ans['${key}']=this.value;updateNav()"></div>`;
+  return `<div class="split-grid">${f(id1,label1,type1,val1,key1)}${f(id2,label2,type2,val2,key2)}</div>`;
+}
+function renderTime(step) {
+  return `<input type="time" class="ifield" style="max-width:220px" value="${ans[step.key]||''}" onchange="ans['${step.key}']=this.value;updateNav()">`;
+}
+function renderNumber(step) {
+  return `<input type="number" class="ifield" style="max-width:220px" value="${ans[step.key]||''}" placeholder="${step.placeholder||''}" min="1" max="5000" oninput="ans['${step.key}']=this.value;updateNav()">`;
+}
+function renderContact() {
+  const f = (id,label,type,ph,req) =>
+    `<div class="igroup"><label class="ilabel">${label}${req?' *':''}</label>
+    <input type="${type}" id="${id}" class="ifield" placeholder="${ph}" value="${ans[id]||''}" oninput="ans['${id}']=this.value"></div>`;
+  return `
+    <div class="form-row">${f('c_name','Full Name','text','Your full name',true)}${f('c_email','Email Address','email','your@email.com',true)}</div>
+    <div class="form-row">${f('c_phone','Phone Number','tel','+353 ...',true)}${f('c_date','Wedding Date','date','',true)}</div>
+    ${f('c_venue','Venue Name & Location','text','e.g. The Shelbourne Hotel, Dublin')}
+    <div class="igroup"><label class="ilabel">Anything else you'd like us to know?</label>
+    <textarea id="c_notes" class="ifield" placeholder="Special requests, budget guidance, questions..." oninput="ans.c_notes=this.value">${ans.c_notes||''}</textarea></div>`;
+}
+function captureContact() {
+  ['c_name','c_email','c_phone','c_date','c_venue','c_notes'].forEach(id => {
+    const el = document.getElementById(id); if(el) ans[id]=el.value.trim();
+  });
+  return ans.c_name && ans.c_email && ans.c_email.includes('@') && ans.c_date && ans.c_phone;
+}
+
+function renderSummary() {
+  const sections = [];
+  const actName = k => ACT_DATA[k]?.name || k;
+  const clean = v => Array.isArray(v) ? v.filter(x=>x!=='none').join(', ') : v;
+  const pickLabel = k => ({ strings:'Strings',jazz:'Jazz',acoustic:'Acoustic',roaming:'Roaming',
+    solo:'Solo',duo:'Duo',trio:'Trio',quartet:'Quartet' })[k] || k;
+
+  if (ans.ceremony_times?.length) {
+    const r = [];
+    if (hasCeremony() && ans.ceremony_music_type) {
+      r.push(['Ceremony — style',   pickLabel(ans.ceremony_music_type)]);
+      if (ans.ceremony_act) r.push(['Ceremony — act', actName(ans.ceremony_act)]);
+    }
+    if (hasCocktail() && ans.cocktail_music_type) {
+      r.push(['Cocktail — style',   pickLabel(ans.cocktail_music_type)]);
+      if (ans.cocktail_act) r.push(['Cocktail — act', actName(ans.cocktail_act)]);
+    }
+    if (hasDinner() && ans.dinner_music_type) {
+      r.push(['Dinner — style',     pickLabel(ans.dinner_music_type)]);
+      if (ans.dinner_act) r.push(['Dinner — act', actName(ans.dinner_act)]);
+    }
+    if (ans.event_arrival_time)    r.push(['Guest arrival',    ans.event_arrival_time]);
+    if (ans.ceremony_guest_count)  r.push(['Ceremony guests',  ans.ceremony_guest_count]);
+    if (ans.ceremony_vows_sound)   r.push(['Sound for vows',   ans.ceremony_vows_sound]);
+    if (r.length) sections.push({ title:'Daytime Music', rows:r });
+  }
+  if (ans.band_size) {
+    const r = [];
+    r.push(['Band size', ({
+      '4_5':'4–5 Piece','6_8':'6–8 Piece','9_11':'9–11 Piece','12_15':'12–15 Piece','orchestra':'Band + Orchestra'
+    })[ans.band_size]||ans.band_size]);
+    if (ans.band_selection)   r.push(['Band',             BAND_DATA[ans.band_selection]?.name || ans.band_selection]);
+    if (ans.reception_time)   r.push(['Reception start',  ans.reception_time]);
+    if (ans.band_guest_count) r.push(['Reception guests', ans.band_guest_count]);
+    if (ans.dj_mc_addon)      r.push(['DJ / MC add-on',   ans.dj_mc_addon]);
+    sections.push({ title:'Reception Band', rows:r });
+  }
+  if (ans.both_savings_take === 'yes' && ans.both_savings_moments?.length) {
+    sections.push({ title:'Smart Savings', rows:[['Band musicians for', clean(ans.both_savings_moments)]] });
+  }
+  if (ans.dj_type) {
+    const r = [];
+    r.push(['Package', ({dj_only:'DJ / MC Only',fusion:'Blitz Fusion',fusion_large:'Blitz Fusion Large',late_night:'Late Night'})[ans.dj_type]||ans.dj_type]);
+    if (ans.fusion_config)             r.push(['Blitz Fusion',         ans.fusion_config]);
+    if (ans.fusion_custom_instruments) r.push(['Custom instruments',   clean(ans.fusion_custom_instruments)]);
+    if (ans.fusion_large_config)       r.push(['Fusion Large',         ans.fusion_large_config]);
+    if (ans.late_night_config)         r.push(['Late Night',           ans.late_night_config]);
+    if (ans.dj_ceremony_addon)         r.push(['Ceremony add-on',      ans.dj_ceremony_addon]);
+    if (ans.dj_ceremony_lineup)        r.push(['Ceremony line-up',     ans.dj_ceremony_lineup]);
+    sections.push({ title:'DJ / Live', rows:r });
+  }
+  {
+    const r = [];
+    if (ans.speeches_sound) r.push(['Speeches sound', ans.speeches_sound]);
+    if (ans.dj_mc_addon)    r.push(['DJ / MC',        ans.dj_mc_addon]);
+    if (r.length) sections.push({ title:'Reception Details', rows:r });
+  }
+  {
+    const r = [];
+    if (ans.extra_lighting)    r.push(['Concert lighting', ans.extra_lighting]);
+    if (ans.lighting_package)  r.push(['Lighting package', ans.lighting_package]);
+    if (ans.extra_stage)       r.push(['Stage',            ans.extra_stage]);
+    if (ans.extra_dance_floor) r.push(['Dance floor',      ans.extra_dance_floor]);
+    if (ans.extra_podiums || ans.dj_podiums) r.push(['Podiums', ans.extra_podiums||ans.dj_podiums]);
+    const ei = (ans.extra_items||[]).filter(v=>v!=='none');
+    if (ei.length) r.push(['Other extras', ei.map(k=>EXTRA_DATA[k]?.name||k).join(', ')]);
+    if (r.length) sections.push({ title:'Extras & Add-ons', rows:r });
+  }
+  {
+    const r = [];
+    if (ans.c_name)  r.push(['Name',         ans.c_name]);
+    if (ans.c_email) r.push(['Email',         ans.c_email]);
+    if (ans.c_phone) r.push(['Phone',         ans.c_phone]);
+    if (ans.c_date)  r.push(['Wedding date',  ans.c_date]);
+    if (ans.c_venue) r.push(['Venue',         ans.c_venue]);
+    if (ans.c_notes) r.push(['Notes',         ans.c_notes]);
+    if (r.length) sections.push({ title:'Your Details', rows:r });
+  }
+  let h = '';
+  sections.forEach(s => {
+    h += `<div class="sum-section"><div class="sum-section-title">${s.title}</div>`;
+    s.rows.forEach(([k,v]) => { h += `<div class="sum-row"><span class="sum-k">${k}</span><span class="sum-v">${v}</span></div>`; });
+    h += '</div>';
+  });
+  h += `<div class="info-box"><strong>What happens next?</strong>
+    <p>The Blitz Nation team will review your selections and be in touch within 24 hours with a personalised quote and availability check.</p></div>`;
+  return h;
+}
+
+// ── EMAILJS ──────────────────────────────────────────────────
+function buildEmail() {
+  const lines = [];
+  const p = (k,v) => { if(v) lines.push(`${k}: ${Array.isArray(v)?v.filter(x=>x!=='none').join(', '):v}`); };
+  p('Journey',ans.journey); p('Moments',ans.ceremony_times);
+  p('Ceremony Style',ans.ceremony_music_type); p('Ceremony Act',ans.ceremony_act);
+  p('Cocktail Style',ans.cocktail_music_type); p('Cocktail Act',ans.cocktail_act);
+  p('Dinner Style',ans.dinner_music_type); p('Dinner Act',ans.dinner_act);
+  p('Arrival Time',ans.event_arrival_time); p('Ceremony Guests',ans.ceremony_guest_count);
+  p('Vows Sound',ans.ceremony_vows_sound); p('Speeches Sound',ans.speeches_sound); p('DJ/MC',ans.dj_mc_addon);
+  p('Band Size',ans.band_size); p('Band',ans.band_selection);
+  p('Reception Start',ans.reception_time); p('Reception Guests',ans.band_guest_count);
+  p('Savings',ans.both_savings_take); p('Savings Moments',ans.both_savings_moments);
+  p('Lighting',ans.extra_lighting); p('Lighting Package',ans.lighting_package);
+  p('Stage',ans.extra_stage); p('Dance Floor',ans.extra_dance_floor);
+  p('Podiums',ans.extra_podiums||ans.dj_podiums); p('Extras',ans.extra_items);
+  p('DJ Package',ans.dj_type); p('Fusion Config',ans.fusion_config);
+  p('Custom Instruments',ans.fusion_custom_instruments);
+  p('Late Night',ans.late_night_config); p('Ceremony Add-on',ans.dj_ceremony_addon);
+  p('Name',ans.c_name); p('Email',ans.c_email); p('Phone',ans.c_phone);
+  p('Wedding Date',ans.c_date); p('Venue',ans.c_venue); p('Notes',ans.c_notes);
+  return lines.join('\n');
+}
+async function sendEnquiry() {
+  const btn = document.getElementById('btnNext');
+  btn.disabled=true; btn.textContent='Sending…';
+  if (EJ_KEY === 'YOUR_PUBLIC_KEY') { console.log('Dev mode:\n'+buildEmail()); showSuccess(); return; }
+  try {
+    await emailjs.send(EJ_SVC, EJ_TPL, {
+      from_name:ans.c_name||'', from_email:ans.c_email||'', reply_to:ans.c_email||'',
+      wedding_date:ans.c_date||'', venue:ans.c_venue||'', phone:ans.c_phone||'',
+      summary:buildEmail(),
+    });
+    showSuccess();
+  } catch(e) {
+    console.error(e); btn.disabled=false; btn.textContent='Send Enquiry →';
+    alert('Something went wrong. Please try again or contact us directly.');
+  }
+}
+function showSuccess() {
+  document.getElementById('sw').innerHTML = `
+    <div style="text-align:center;padding:60px 20px 40px">
+      <div style="width:60px;height:60px;background:var(--tan-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 22px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A8976E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+      </div>
+      <div class="s-sec" style="text-align:center">Enquiry Sent</div>
+      <h1 class="s-title" style="margin-bottom:14px">Thank you, ${ans.c_name||'there'}.</h1>
+      <p class="s-sub" style="max-width:400px;margin:0 auto 30px">The Blitz Nation team will review your selections and be in touch within 24 hours with a personalised quote and availability check.</p>
+      <div style="background:var(--tan-bg);border:1px solid var(--tan-l);border-radius:var(--r);padding:15px 20px;max-width:340px;margin:0 auto 28px;font-size:13px;color:var(--muted)">
+        Confirmation sent to<br><strong style="color:var(--text);font-size:15px">${ans.c_email||''}</strong>
+      </div>
+      <button class="btn btn-next" style="display:inline-block;max-width:160px" onclick="location.reload()">Start Over</button>
+    </div>`;
+  document.getElementById('fnav').style.display='none';
+  document.getElementById('pf').style.width='100%';
+}
+
+// ── PROGRESS & NAV ───────────────────────────────────────────
+const EST = 24;
+function updateProgress() {
+  const pct = Math.min(95, Math.round((hist.length/EST)*100));
+  document.getElementById('pf').style.width = pct+'%';
+  document.getElementById('sc').textContent = `Step ${hist.length}`;
+}
+function updateNav() {
+  const step = getStep(cur);
+  document.getElementById('btnBack').style.visibility = hist.length>1?'visible':'hidden';
+  const btn = document.getElementById('btnNext');
+  if (step.type === 'summary') { btn.textContent='Send Enquiry →'; btn.className='btn btn-submit'; btn.disabled=false; return; }
+  btn.textContent='Continue →'; btn.className='btn btn-next';
+  const free = step.type==='contact' || step.type==='multi';
+  btn.disabled = !free && !hasValue(step);
+}
+
+// ── BOOT ─────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
