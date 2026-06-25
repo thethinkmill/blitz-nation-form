@@ -280,9 +280,9 @@ textarea.ifield{resize:vertical;min-height:88px;font-weight:300}
 </div>
 <script>
 // ── CONFIG ───────────────────────────────────────────────────
-const EJ_KEY = 'YOUR_PUBLIC_KEY';
-const EJ_SVC = 'YOUR_SERVICE_ID';
-const EJ_TPL = 'YOUR_TEMPLATE_ID';
+const EJ_KEY = 'nRiu6slSToFZyqh2';
+const EJ_SVC = 'service_ch99yic';
+const EJ_TPL = 'template_1xgsko5';
 emailjs.init({ publicKey: EJ_KEY });
 
 // ── BAND DATA ────────────────────────────────────────────────
@@ -1608,21 +1608,24 @@ function renderSummary() {
 function buildEmail() {
   const lines = [];
   const p = (k,v) => { if(v) lines.push(`${k}: ${Array.isArray(v)?v.filter(x=>x!=='none').join(', '):v}`); };
+  const act = k => k ? (ACT_DATA[k]||{name:k}).name : null;
+  const band = k => k ? (BAND_DATA[k]||{name:k}).name : null;
   p('Journey',ans.journey); p('Moments',ans.ceremony_times);
-  p('Ceremony Style',ans.ceremony_music_type); p('Ceremony Act',ans.ceremony_act);
-  p('Cocktail Style',ans.cocktail_music_type); p('Cocktail Act',ans.cocktail_act);
-  p('Dinner Style',ans.dinner_music_type); p('Dinner Act',ans.dinner_act);
+  p('Ceremony Style',ans.ceremony_music_type); p('Ceremony Act',act(ans.ceremony_act)); p('Ceremony Strings Size',ans.ceremony_strings_size);
+  p('Cocktail Style',ans.cocktail_music_type); p('Cocktail Act',act(ans.cocktail_act)); p('Cocktail Strings Size',ans.cocktail_strings_size);
+  p('Dinner Style',ans.dinner_music_type); p('Dinner Act',act(ans.dinner_act)); p('Dinner Strings Size',ans.dinner_strings_size);
   p('Arrival Time',ans.event_arrival_time); p('Ceremony Guests',ans.ceremony_guest_count);
   p('Vows Sound',ans.ceremony_vows_sound); p('Speeches Sound',ans.speeches_sound); p('DJ/MC',ans.dj_mc_addon);
-  p('Band Size',ans.band_size); p('Band',ans.band_selection);
+  p('Band Size',ans.band_size); p('Band',band(ans.band_selection));
   p('Reception Start',ans.reception_time); p('Reception Guests',ans.band_guest_count);
   p('Savings',ans.both_savings_take); p('Savings Moments',ans.both_savings_moments);
   p('Lighting',ans.extra_lighting); p('Lighting Package',ans.lighting_package);
   p('Stage',ans.extra_stage); p('Dance Floor',ans.extra_dance_floor);
   p('Podiums',ans.extra_podiums||ans.dj_podiums); p('Extras',ans.extra_items);
-  p('DJ Package',ans.dj_type); p('Fusion Config',ans.fusion_config);
+  p('DJ Package',ans.dj_type); p('Fusion Config',ans.fusion_config); p('Fusion Custom Count',ans.fusion_custom_count);
+  p('Fusion Large Config',ans.fusion_large_config);
   p('Custom Instruments',ans.fusion_custom_instruments);
-  p('Late Night',ans.late_night_config); p('Ceremony Add-on',ans.dj_ceremony_addon);
+  p('Late Night',ans.late_night_config); p('Ceremony Add-on',ans.dj_ceremony_addon); p('Ceremony Lineup',ans.dj_ceremony_lineup);
   p('Name',ans.c_name); p('Email',ans.c_email); p('Phone',ans.c_phone);
   p('Wedding Date',ans.c_date); p('Venue',ans.c_venue); p('Notes',ans.c_notes);
   return lines.join('\n');
