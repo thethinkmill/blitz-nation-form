@@ -1633,7 +1633,7 @@ function buildEmail() {
 async function sendEnquiry() {
   const btn = document.getElementById('btnNext');
   btn.disabled=true; btn.textContent='Sending…';
-  if (EJ_KEY === 'YOUR_PUBLIC_KEY') { console.log('Dev mode:\n'+buildEmail()); showSuccess(); return; }
+  if (EJ_KEY === '-nRiu6slSToFZyqh2') { console.log('Dev mode:\n'+buildEmail()); showSuccess(); return; }
   try {
     await emailjs.send(EJ_SVC, EJ_TPL, {
       from_name:ans.c_name||'', from_email:ans.c_email||'', reply_to:ans.c_email||'',
